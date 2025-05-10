@@ -1,5 +1,6 @@
 import * as React from "react";
 import { logout } from "@/actions/auth";
+import getAuthUser from "@/actions/getAuthUser";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -15,7 +16,6 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import getAuthUser from "@/actions/getAuthUser";
 
 const adminLinks = [
   {
