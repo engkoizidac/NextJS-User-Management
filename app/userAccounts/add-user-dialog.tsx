@@ -1,9 +1,15 @@
 "use client";
 
 import { useActionState, useState, useEffect } from "react";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import {
+  AlertCircle,
+  CheckCircle,
+  CheckCircle2,
+  Eye,
+  EyeOff,
+} from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -30,31 +36,47 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { addUser } from "@/actions/userAccount";
-import { UserAccountFormSchema } from "@/lib/validation";
 import Icons from "@/components/ui/icons";
 
 type AddUserDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onSubmitSuccess?: () => void;
 };
 
-export function AddUserDialog({ open, onOpenChange }: AddUserDialogProps) {
+export function AddUserDialog({
+  open,
+  onOpenChange,
+  onSubmitSuccess,
+}: AddUserDialogProps) {
   const [state, action, isPending] = useActionState(addUser, undefined);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const form = useForm({
-    resolver: zodResolver(UserAccountFormSchema),
     defaultValues: {
       fullName: "",
       username: "",
       password: "",
-      status: "Active" as const,
+      status: "Activated" as const,
     },
   });
 
   useEffect(() => {
     if (state?.success) {
-      onOpenChange(false);
-      form.reset();
+      setTimeout(() => {
+        // Trigger the callback to refresh the data table
+        if (onSubmitSuccess) {
+          onSubmitSuccess();
+        }
+
+        form.reset();
+        onOpenChange(false);
+        state.success = false; // Reset success state
+      }, 1000);
     }
   }, [state?.success, onOpenChange, form]);
 
@@ -71,6 +93,12 @@ export function AddUserDialog({ open, onOpenChange }: AddUserDialogProps) {
 
         <Form {...form}>
           <form action={action} className="space-y-4">
+            {state?.success && (
+              <Alert className="bg-green-50 border-green-200 text-green-800">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <AlertDescription>User successfully created!</AlertDescription>
+              </Alert>
+            )}
             <FormField
               control={form.control}
               name="fullName"
@@ -80,11 +108,13 @@ export function AddUserDialog({ open, onOpenChange }: AddUserDialogProps) {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
-                  {state?.errors?.fullName && (
-                    <p className="text-sm text-red-500">
-                      {state.errors.fullName}
-                    </p>
-                  )}
+                  {state?.errors &&
+                    "fullName" in state.errors &&
+                    state.errors.fullName && (
+                      <p className="text-sm text-red-500">
+                        {state.errors.fullName}
+                      </p>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -115,13 +145,35 @@ export function AddUserDialog({ open, onOpenChange }: AddUserDialogProps) {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" {...field} />
+                    <div className="relative">
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        autoComplete="new-password"
+                        {...field}
+                      />
+                      <button
+                        type="button"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        onClick={togglePasswordVisibility}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
                   </FormControl>
-                  {state?.errors?.password && (
-                    <p className="text-sm text-red-500">
-                      {state.errors.password}
-                    </p>
-                  )}
+                  {state?.errors &&
+                    "password" in state.errors &&
+                    state.errors.password && (
+                      <p className="text-sm text-red-500">
+                        {state.errors.password}
+                      </p>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -144,15 +196,17 @@ export function AddUserDialog({ open, onOpenChange }: AddUserDialogProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Active">Active</SelectItem>
-                      <SelectItem value="Inactive">Inactive</SelectItem>
+                      <SelectItem value="Activated">Activated</SelectItem>
+                      <SelectItem value="Deactivated">Deactivated</SelectItem>
                     </SelectContent>
                   </Select>
-                  {state?.errors?.status && (
-                    <p className="text-sm text-red-500">
-                      {state.errors.status}
-                    </p>
-                  )}
+                  {state?.errors &&
+                    "status" in state.errors &&
+                    state.errors.status && (
+                      <p className="text-sm text-red-500">
+                        {state.errors.status}
+                      </p>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -165,9 +219,6 @@ export function AddUserDialog({ open, onOpenChange }: AddUserDialogProps) {
                 Add User
               </Button>
             </DialogFooter>
-            {state?.error && (
-              <p className="text-sm text-red-500">{state.error}</p>
-            )}
           </form>
         </Form>
       </DialogContent>

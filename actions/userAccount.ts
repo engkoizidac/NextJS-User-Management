@@ -1,6 +1,8 @@
 "use server";
 
+import getUsers, { postUser } from "@/lib/user";
 import { UserAccountFormSchema } from "@/lib/validation";
+import bcrypt from "bcrypt";
 
 export async function addUser(prevState: any, formData: FormData) {
   const validatedFields = UserAccountFormSchema.safeParse({
@@ -20,11 +22,27 @@ export async function addUser(prevState: any, formData: FormData) {
 
   const { fullName, username, password, status } = validatedFields.data;
 
-  console.log(validatedFields.data);
-
   try {
-    // TODO: Add your database logic here
-    // For example: await db.user.create({ data: validatedFields.data })
+    const userCollection = await getUsers();
+    if (!userCollection) return { errors: { username: "Server error!" } };
+
+    const existingUser = await userCollection.find(
+      (user) => user.username === username
+    );
+    if (existingUser)
+      return { errors: { username: "Username already exists." } };
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await postUser(
+      fullName,
+      username,
+      hashedPassword,
+      status === "Activated" ? "Activated" : "Deactivated"
+    );
+
+    if (!user) return { errors: { username: "Server error!" } };
+    console.log("New user created:", user);
 
     return {
       success: true,

@@ -5,8 +5,7 @@ import bcrypt from "bcrypt";
 import { LoginFormSchema } from "@/lib/validation";
 import { redirect } from "next/navigation";
 import { createSession } from "@/app/lib/session";
-import db from "@/lib/db";
-import getUsers from "@/lib/db";
+import getUsers from "@/lib/user";
 import { cookies } from "next/headers";
 
 export async function login(state: any, formData: FormData) {

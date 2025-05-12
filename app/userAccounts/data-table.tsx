@@ -1,6 +1,7 @@
 "use client";
 
 import { Pencil, PlusCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
   ColumnDef,
@@ -35,9 +36,16 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [open, setOpen] = useState(false);
+
+  const handleSubmitSuccess = () => {
+    router.refresh(); // This will trigger a revalidation of the page
+  };
+
   const table = useReactTable({
     data,
     columns,
@@ -49,9 +57,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
-
-  //for add user dialog
-  const [open, setOpen] = useState(false);
 
   return (
     <div>
@@ -76,7 +81,11 @@ export function DataTable<TData, TValue>({
               Add User
             </div>
           </button>
-          <AddUserDialog open={open} onOpenChange={setOpen} />
+          <AddUserDialog
+            open={open}
+            onOpenChange={setOpen}
+            onSubmitSuccess={handleSubmitSuccess}
+          />
         </div>
       </div>
       <div className="rounded-md border">

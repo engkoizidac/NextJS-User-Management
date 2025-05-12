@@ -19,7 +19,7 @@ export type User = {
   id: string;
   username: string;
   password: string;
-  status: "Active" | "Inactive";
+  status: "Activated" | "Deactivated";
   fullName: string;
   createdAt: Date;
   updatedAt: Date;
@@ -45,12 +45,12 @@ export const columns: ColumnDef<User>[] = [
       const status = row.getValue("status") as string;
 
       const statusMap: Record<string, { text: string; classes: string }> = {
-        Active: {
-          text: "Active",
+        Activated: {
+          text: "Activated",
           classes: "bg-green-100 text-green-800",
         },
-        Inactive: {
-          text: "Inactive",
+        Deactivated: {
+          text: "Deactivated",
           classes: "bg-gray-100 text-gray-800",
         },
       };
