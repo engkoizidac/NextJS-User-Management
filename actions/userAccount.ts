@@ -1,6 +1,7 @@
 "use server";
 
 import getUsers, { postUser } from "@/lib/user";
+import { removeUser } from "@/lib/user";
 import { UserAccountFormSchema } from "@/lib/validation";
 import bcrypt from "bcrypt";
 
@@ -43,6 +44,22 @@ export async function addUser(prevState: any, formData: FormData) {
 
     if (!user) return { errors: { username: "Server error!" } };
     console.log("New user created:", user);
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to create user",
+    };
+  }
+}
+
+export async function deleteUser(userId: string) {
+  console.log("Deleted userid:" + userId);
+  try {
+    const user = await removeUser(userId);
+    if (!user) return { errors: { username: "Server error!" } };
 
     return {
       success: true,

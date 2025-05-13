@@ -2,6 +2,8 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal, Pencil, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/toast";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import YesNoDialog from "./confirm-delete-user-dialog";
+import { deleteUser } from "@/actions/userAccount";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -74,6 +78,25 @@ export const columns: ColumnDef<User>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
+      const { toast } = useToast();
+
+      const handleDelete = async () => {
+        const result = await deleteUser(row.original.id);
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: "User deleted successfully",
+            variant: "success",
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: result.error || "Failed to delete user",
+          });
+        }
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -91,10 +114,15 @@ export const columns: ColumnDef<User>[] = [
               </div>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <div className="flex items-center">
-                <Trash className="mr-2 h-4 w-4" />
-                Delete
-              </div>
+              <YesNoDialog
+                onConfirm={handleDelete}
+                userName={row.original.fullName}
+              >
+                <div className="flex items-center">
+                  <Trash className="mr-2 h-4 w-4" />
+                  Delete
+                </div>
+              </YesNoDialog>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

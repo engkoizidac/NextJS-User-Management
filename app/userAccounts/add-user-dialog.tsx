@@ -9,7 +9,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
+
 import {
   Dialog,
   DialogContent,
@@ -37,6 +37,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { addUser } from "@/actions/userAccount";
 import Icons from "@/components/ui/icons";
+import { useToast } from "@/components/ui/toast";
 
 type AddUserDialogProps = {
   open: boolean;
@@ -56,6 +57,8 @@ export function AddUserDialog({
     setShowPassword(!showPassword);
   };
 
+  const { toast } = useToast();
+
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -67,16 +70,19 @@ export function AddUserDialog({
 
   useEffect(() => {
     if (state?.success) {
-      setTimeout(() => {
-        // Trigger the callback to refresh the data table
-        if (onSubmitSuccess) {
-          onSubmitSuccess();
-        }
+      // Trigger the callback to refresh the data table
 
-        form.reset();
-        onOpenChange(false);
-        state.success = false; // Reset success state
-      }, 1000);
+      if (onSubmitSuccess) {
+        onSubmitSuccess();
+      }
+      toast({
+        title: "Success",
+        description: "User added successfully",
+        variant: "success",
+      });
+
+      form.reset();
+      onOpenChange(false);
     }
   }, [state?.success, onOpenChange, form]);
 
@@ -92,21 +98,15 @@ export function AddUserDialog({
         </DialogHeader>
 
         <Form {...form}>
-          <form action={action} className="space-y-4">
-            {state?.success && (
-              <Alert className="bg-green-50 border-green-200 text-green-800">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <AlertDescription>User successfully created!</AlertDescription>
-              </Alert>
-            )}
+          <form id="add-user-form" action={action} className="space-y-4">
             <FormField
               control={form.control}
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel htmlFor="fullName">Full Name</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input id="fullName" {...field} />
                   </FormControl>
                   {state?.errors &&
                     "fullName" in state.errors &&
@@ -125,9 +125,9 @@ export function AddUserDialog({
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel htmlFor="username">Username</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input id="username" {...field} />
                   </FormControl>
                   {state?.errors?.username && (
                     <p className="text-sm text-red-500">
@@ -143,16 +143,18 @@ export function AddUserDialog({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel htmlFor="password">Password</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
+                        id="password"
                         type={showPassword ? "text" : "password"}
                         autoComplete="new-password"
                         {...field}
                       />
                       <button
                         type="button"
+                        id="toggle-password"
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         onClick={togglePasswordVisibility}
                         aria-label={
@@ -184,20 +186,27 @@ export function AddUserDialog({
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Status</FormLabel>
+                  <FormLabel htmlFor="status">Status</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     value={field.value}
                     {...form.register("status")}
                   >
                     <FormControl>
-                      <SelectTrigger>
-                        <SelectValue id="stat" placeholder="Select a status" />
+                      <SelectTrigger id="status">
+                        <SelectValue
+                          id="status-value"
+                          placeholder="Select a status"
+                        />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="Activated">Activated</SelectItem>
-                      <SelectItem value="Deactivated">Deactivated</SelectItem>
+                      <SelectItem id="status-activated" value="Activated">
+                        Activated
+                      </SelectItem>
+                      <SelectItem id="status-deactivated" value="Deactivated">
+                        Deactivated
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   {state?.errors &&
@@ -212,7 +221,7 @@ export function AddUserDialog({
               )}
             />
             <DialogFooter>
-              <Button type="submit" disabled={isPending}>
+              <Button type="submit" id="submit-user" disabled={isPending}>
                 {isPending && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}

@@ -43,3 +43,18 @@ export async function postUser(
     throw new Error("Failed to create user");
   }
 }
+
+export async function removeUser(userId: string) {
+  try {
+    await prisma.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user. Please try again.");
+  }
+}
