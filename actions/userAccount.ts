@@ -43,7 +43,6 @@ export async function addUser(prevState: any, formData: FormData) {
     );
 
     if (!user) return { errors: { username: "Server error!" } };
-    console.log("New user created:", user);
 
     return {
       success: true,
@@ -56,7 +55,6 @@ export async function addUser(prevState: any, formData: FormData) {
 }
 
 export async function deleteUser(userId: string) {
-  console.log("Deleted userid:" + userId);
   try {
     const user = await removeUser(userId);
     if (!user) return { errors: { username: "Server error!" } };
