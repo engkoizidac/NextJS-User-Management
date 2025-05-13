@@ -78,6 +78,7 @@ export const columns: ColumnDef<User>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
+      const router = useRouter();
       const { toast } = useToast();
 
       const handleDelete = async () => {
@@ -88,6 +89,7 @@ export const columns: ColumnDef<User>[] = [
             description: "User deleted successfully",
             variant: "success",
           });
+          router.refresh(); // Refresh the page to update the data table
         } else {
           toast({
             variant: "destructive",
