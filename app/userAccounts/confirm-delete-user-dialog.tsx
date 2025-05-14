@@ -56,11 +56,7 @@ export default function YesNoDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setOpen(false)}
-            disabled={isDeleting}
-          >
+          <Button onClick={() => setOpen(false)} disabled={isDeleting}>
             Cancel
           </Button>
           <Button
