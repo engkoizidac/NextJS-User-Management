@@ -26,9 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className}>
       <body className={`antialiased`}>
+        <Toaster position="bottom-center" reverseOrder={false} />
         <NavBar />
         {children}
-        <Toaster position="bottom-center" reverseOrder={false} />
       </body>
     </html>
   );

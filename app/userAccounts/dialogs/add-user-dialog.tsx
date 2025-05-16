@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { addUser } from "@/actions/userAccount";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type AddUserDialogProps = {
   open: boolean;
@@ -62,7 +63,9 @@ export function AddUserDialog({
 
   useEffect(() => {
     if (state?.success) {
-      // Trigger the callback to refresh the data table
+      if (onSubmitSuccess) {
+        onSubmitSuccess(); // <-- trigger parent refresh
+      }
       toast.success("User added successfully");
 
       form.reset();

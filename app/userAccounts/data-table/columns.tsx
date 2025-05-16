@@ -14,6 +14,7 @@ import {
 import YesNoDialog from "../dialogs/confirm-delete-user-dialog";
 import { deleteUser } from "@/actions/userAccount";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -26,6 +27,50 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+function ActionsCell({ row }: { row: any }) {
+  const router = useRouter();
+  const handleDelete = async () => {
+    const result = await deleteUser(row.original.id);
+    if (result.success) {
+      toast.success("User deleted successfully");
+      router.refresh();
+    } else {
+      toast.error("Failed to delete user");
+    }
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem>
+          <div className="flex items-center">
+            <Pencil className="mr-2 h-4 w-4" />
+            Edit
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <YesNoDialog
+            onConfirm={handleDelete}
+            userName={row.original.fullName}
+          >
+            <div className="flex items-center">
+              <Trash className="mr-2 h-4 w-4" />
+              Delete
+            </div>
+          </YesNoDialog>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -75,46 +120,6 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "id",
     header: "Actions",
     id: "actions",
-    cell: ({ row }) => {
-      const handleDelete = async () => {
-        const result = await deleteUser(row.original.id);
-        if (result.success) {
-          toast.success("User deleted successfully");
-        } else {
-          toast.error("Failed to delete user");
-        }
-      };
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <div className="flex items-center">
-                <Pencil className="mr-2 h-4 w-4" />
-                Edit
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <YesNoDialog
-                onConfirm={handleDelete}
-                userName={row.original.fullName}
-              >
-                <div className="flex items-center">
-                  <Trash className="mr-2 h-4 w-4" />
-                  Delete
-                </div>
-              </YesNoDialog>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ActionsCell,
   },
 ];
