@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import YesNoDialog from "../confirm-delete-user-dialog";
+import YesNoDialog from "../dialogs/confirm-delete-user-dialog";
 import { deleteUser } from "@/actions/userAccount";
 import toast from "react-hot-toast";
 
