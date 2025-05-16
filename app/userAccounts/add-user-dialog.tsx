@@ -2,13 +2,7 @@
 
 import { useActionState, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {
-  AlertCircle,
-  CheckCircle,
-  CheckCircle2,
-  Eye,
-  EyeOff,
-} from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 
 import {
   Dialog,
@@ -37,7 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { addUser } from "@/actions/userAccount";
 import Icons from "@/components/ui/icons";
-import { useToast } from "@/components/ui/toast";
+import toast from "react-hot-toast";
 
 type AddUserDialogProps = {
   open: boolean;
@@ -57,8 +51,6 @@ export function AddUserDialog({
     setShowPassword(!showPassword);
   };
 
-  const { toast } = useToast();
-
   const form = useForm({
     defaultValues: {
       fullName: "",
@@ -71,15 +63,7 @@ export function AddUserDialog({
   useEffect(() => {
     if (state?.success) {
       // Trigger the callback to refresh the data table
-
-      if (onSubmitSuccess) {
-        onSubmitSuccess();
-      }
-      toast({
-        title: "Success",
-        description: "User added successfully",
-        variant: "success",
-      });
+      toast.success("User added successfully");
 
       form.reset();
       onOpenChange(false);

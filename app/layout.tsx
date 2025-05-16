@@ -1,7 +1,7 @@
 import "./globals.css";
 import { NavBar } from "./components/nav-bar";
-import { Toaster } from "@/components/ui/toaster";
 import { Geist } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -28,7 +28,7 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <NavBar />
         {children}
-        <Toaster />
+        <Toaster position="bottom-center" reverseOrder={false} />
       </body>
     </html>
   );

@@ -1,10 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/toast";
-
+import { MoreHorizontal, Pencil, Router, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,8 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import YesNoDialog from "./confirm-delete-user-dialog";
+import YesNoDialog from "../confirm-delete-user-dialog";
 import { deleteUser } from "@/actions/userAccount";
+import toast from "react-hot-toast";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -78,24 +76,12 @@ export const columns: ColumnDef<User>[] = [
     header: "Actions",
     id: "actions",
     cell: ({ row }) => {
-      const router = useRouter();
-      const { toast } = useToast();
-
       const handleDelete = async () => {
         const result = await deleteUser(row.original.id);
         if (result.success) {
-          toast({
-            title: "Success",
-            description: "User deleted successfully",
-            variant: "success",
-          });
-          router.refresh(); // Refresh the page to update the data table
+          toast.success("User deleted successfully");
         } else {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: result.error || "Failed to delete user",
-          });
+          toast.error("Failed to delete user");
         }
       };
 
