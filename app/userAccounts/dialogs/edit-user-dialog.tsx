@@ -56,11 +56,6 @@ export function EditUserDialog({
       updateUser(prevState, formData, user.id),
     undefined
   );
-  const [showPassword, setShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   const form = useForm({
     defaultValues: {
@@ -73,17 +68,15 @@ export function EditUserDialog({
 
   useEffect(() => {
     if (state?.success) {
+      onOpenChange(false);
       toast.success("User updated successfully");
-      setTimeout(() => {
-        form.reset();
-        onOpenChange(false);
-        if (onSubmitSuccess) {
-          onSubmitSuccess();
-        }
-      }, 1000); // 1 second delay
+      form.reset();
+
+      if (onSubmitSuccess) {
+        onSubmitSuccess();
+      }
     }
-    // Only include stable dependencies
-  }, [state?.success, onOpenChange, onSubmitSuccess]);
+  }, [state?.success, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

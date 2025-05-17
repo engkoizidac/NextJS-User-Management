@@ -73,6 +73,7 @@ export async function updateUser(
   userId: string
 ) {
   const validatedFields = UserAccountFormSchema.safeParse({
+    id: formData.get("id"),
     fullName: formData.get("fullName"),
     username: formData.get("username"),
     status: formData.get("status"),
@@ -86,7 +87,7 @@ export async function updateUser(
 
   const { fullName, username, status } = validatedFields.data;
 
-  console.log(validatedFields.data);
+  console.log(userId);
 
   try {
     return {

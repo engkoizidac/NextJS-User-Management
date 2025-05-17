@@ -62,7 +62,6 @@ export function AddUserDialog({
 
   useEffect(() => {
     if (state?.success) {
-      //setTimeout(() => {
       onOpenChange(false);
       toast.success("User added successfully");
       form.reset();
@@ -70,9 +69,8 @@ export function AddUserDialog({
       if (onSubmitSuccess) {
         onSubmitSuccess(); // <-- trigger parent refresh
       }
-      // }, 1000); // 1000ms = 1 second delay
     }
-  }, [state?.success, onOpenChange, form]);
+  }, [state?.success, onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
