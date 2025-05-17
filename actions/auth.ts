@@ -32,12 +32,14 @@ export async function login(state: any, formData: FormData) {
     (user) => user.username === username
   );
 
-  if (!existingUser) return { errors: { username: "Invalid credentials." } };
+  if (!existingUser) return { errors: { username: "Username doesn't exist." } };
 
   //Check password
-  const matchedPassword = await bcrypt.compare(password, existingUser.password);
-  if (!matchedPassword)
-    return { errors: { username: "Invalid credentials 2." } };
+  const matchedPassword = await bcrypt.compare(
+    <string>password,
+    existingUser.password
+  );
+  if (!matchedPassword) return { errors: { username: "Invalid password." } };
 
   // Create a session
   await createSession(existingUser.id);

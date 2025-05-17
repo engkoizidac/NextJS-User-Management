@@ -13,8 +13,6 @@ export async function addUser(prevState: any, formData: FormData) {
     status: formData.get("status"),
   });
 
-  console.log(formData.get("status"));
-
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
@@ -33,7 +31,7 @@ export async function addUser(prevState: any, formData: FormData) {
     if (existingUser)
       return { errors: { username: "Username already exists." } };
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(<string>password, 10);
 
     const user = await postUser(
       fullName,
@@ -65,6 +63,28 @@ export async function deleteUser(userId: string) {
   } catch (error) {
     return {
       error: "Failed to create user",
+    };
+  }
+}
+
+export async function updateUser(revState: any, formData: FormData) {
+  const validatedFields = UserAccountFormSchema.safeParse({
+    fullName: formData.get("fullName"),
+    username: formData.get("username"),
+    password: formData.get("password"),
+    status: formData.get("status"),
+
+    
+
+
+  });
+  try {
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to update user",
     };
   }
 }

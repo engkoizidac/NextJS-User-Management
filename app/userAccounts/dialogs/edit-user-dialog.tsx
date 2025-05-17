@@ -29,22 +29,29 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addUser } from "@/actions/userAccount";
+import { updateUser } from "@/actions/userAccount";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
 
-type AddUserDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSubmitSuccess?: () => void;
+type EditUserDialogProps = {
+  open: boolean,
+  onOpenChange: (open: boolean) => void,
+  onSubmitSuccess?: () => void,
+  user: {
+    id: string;
+    fullName: string;
+    username: string;
+    status: string;
+  };
 };
 
-export function AddUserDialog({
+export function EditUserDialog({
   open,
   onOpenChange,
   onSubmitSuccess,
-}: AddUserDialogProps) {
-  const [state, action, isPending] = useActionState(addUser, undefined);
+  user,
+}: EditUserDialogProps) {
+  const [state, action, isPending] = useActionState(updateUser, undefined);
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -53,40 +60,40 @@ export function AddUserDialog({
 
   const form = useForm({
     defaultValues: {
-      fullName: "",
-      username: "",
-      password: "",
-      status: "Activated" as const,
+      id: user.id,
+      fullName: user.fullName,
+      username: user.username,
+      status: user.status,
+      password: "", // Optional - only required if changing password
     },
   });
 
   useEffect(() => {
     if (state?.success) {
-      //setTimeout(() => {
-      onOpenChange(false);
-      toast.success("User added successfully");
-      form.reset();
-
-      if (onSubmitSuccess) {
-        onSubmitSuccess(); // <-- trigger parent refresh
-      }
-      // }, 1000); // 1000ms = 1 second delay
+      toast.success("User updated successfully");
+      setTimeout(() => {
+        form.reset();
+        onOpenChange(false);
+        if (onSubmitSuccess) {
+          onSubmitSuccess();
+        }
+      }, 1000); // 1 second delay
     }
-  }, [state?.success, onOpenChange, form]);
+    // Only include stable dependencies
+  }, [state?.success, onOpenChange, onSubmitSuccess]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add New User</DialogTitle>
+          <DialogTitle>Edit User</DialogTitle>
           <DialogDescription>
-            Fill in the information for the new user. Click save when you're
-            done.
+            Update the information for the user. Click save when you're done.
           </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
-          <form id="add-user-form" action={action} className="space-y-4">
+          <form id="edit-user-form" action={action} className="space-y-4">
             <FormField
               control={form.control}
               name="fullName"
@@ -96,13 +103,11 @@ export function AddUserDialog({
                   <FormControl>
                     <Input id="fullName" {...field} />
                   </FormControl>
-                  {state?.errors &&
-                    "fullName" in state.errors &&
-                    state.errors.fullName && (
-                      <p className="text-sm text-red-500">
-                        {state.errors.fullName}
-                      </p>
-                    )}
+                  {state?.error && (
+                    <p className="text-sm text-red-500">
+                      {state.error}
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -117,9 +122,9 @@ export function AddUserDialog({
                   <FormControl>
                     <Input id="username" {...field} />
                   </FormControl>
-                  {state?.errors?.username && (
+                  {state?.error && (
                     <p className="text-sm text-red-500">
-                      {state.errors.username}
+                      {state.error}
                     </p>
                   )}
                   <FormMessage />
@@ -131,40 +136,34 @@ export function AddUserDialog({
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <FormLabel htmlFor="password">Password (Optional)</FormLabel>
                   <FormControl>
                     <div className="relative">
                       <Input
                         id="password"
                         type={showPassword ? "text" : "password"}
-                        autoComplete="new-password"
                         {...field}
                       />
-                      <button
+                      <Button
                         type="button"
-                        id="toggle-password"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-2 top-1/2 -translate-y-1/2"
                         onClick={togglePasswordVisibility}
-                        aria-label={
-                          showPassword ? "Hide password" : "Show password"
-                        }
                       >
                         {showPassword ? (
-                          <EyeOff className="h-5 w-5" />
+                          <EyeOff className="h-4 w-4" />
                         ) : (
-                          <Eye className="h-5 w-5" />
+                          <Eye className="h-4 w-4" />
                         )}
-                      </button>
+                      </Button>
                     </div>
                   </FormControl>
-                  {state?.errors &&
-                    "password" in state.errors &&
-                    state.errors.password && (
-                      <p className="text-sm text-red-500">
-                        {state.errors.password}
-                      </p>
-                    )}
-                  <FormMessage />
+                  {state?.error && (
+                    <p className="text-sm text-red-500">
+                      {state.error}
+                    </p>
+                  )}
                 </FormItem>
               )}
             />
@@ -197,13 +196,11 @@ export function AddUserDialog({
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  {state?.errors &&
-                    "status" in state.errors &&
-                    state.errors.status && (
-                      <p className="text-sm text-red-500">
-                        {state.errors.status}
-                      </p>
-                    )}
+                  {state?.error && (
+                    <p className="text-sm text-red-500">
+                      {state.error}
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -213,7 +210,7 @@ export function AddUserDialog({
                 {isPending && (
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Add User
+                Save Changes
               </Button>
             </DialogFooter>
           </form>
