@@ -34,9 +34,9 @@ import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
 
 type EditUserDialogProps = {
-  open: boolean,
-  onOpenChange: (open: boolean) => void,
-  onSubmitSuccess?: () => void,
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmitSuccess?: () => void;
   user: {
     id: string;
     fullName: string;
@@ -51,7 +51,11 @@ export function EditUserDialog({
   onSubmitSuccess,
   user,
 }: EditUserDialogProps) {
-  const [state, action, isPending] = useActionState(updateUser, undefined);
+  const [state, action, isPending] = useActionState(
+    async (prevState: any, formData: FormData) =>
+      updateUser(prevState, formData, user.id),
+    undefined
+  );
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -64,7 +68,6 @@ export function EditUserDialog({
       fullName: user.fullName,
       username: user.username,
       status: user.status,
-      password: "", // Optional - only required if changing password
     },
   });
 
@@ -104,9 +107,7 @@ export function EditUserDialog({
                     <Input id="fullName" {...field} />
                   </FormControl>
                   {state?.error && (
-                    <p className="text-sm text-red-500">
-                      {state.error}
-                    </p>
+                    <p className="text-sm text-red-500">{state.error}</p>
                   )}
                   <FormMessage />
                 </FormItem>
@@ -123,51 +124,12 @@ export function EditUserDialog({
                     <Input id="username" {...field} />
                   </FormControl>
                   {state?.error && (
-                    <p className="text-sm text-red-500">
-                      {state.error}
-                    </p>
+                    <p className="text-sm text-red-500">{state.error}</p>
                   )}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="password">Password (Optional)</FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        {...field}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-2 top-1/2 -translate-y-1/2"
-                        onClick={togglePasswordVisibility}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </FormControl>
-                  {state?.error && (
-                    <p className="text-sm text-red-500">
-                      {state.error}
-                    </p>
-                  )}
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="status"
@@ -197,9 +159,7 @@ export function EditUserDialog({
                     </SelectContent>
                   </Select>
                   {state?.error && (
-                    <p className="text-sm text-red-500">
-                      {state.error}
-                    </p>
+                    <p className="text-sm text-red-500">{state.error}</p>
                   )}
                   <FormMessage />
                 </FormItem>

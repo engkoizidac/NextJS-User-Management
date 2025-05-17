@@ -67,17 +67,27 @@ export async function deleteUser(userId: string) {
   }
 }
 
-export async function updateUser(revState: any, formData: FormData) {
+export async function updateUser(
+  revState: any,
+  formData: FormData,
+  userId: string
+) {
   const validatedFields = UserAccountFormSchema.safeParse({
     fullName: formData.get("fullName"),
     username: formData.get("username"),
-    password: formData.get("password"),
     status: formData.get("status"),
-
-    
-
-
   });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { fullName, username, status } = validatedFields.data;
+
+  console.log(validatedFields.data);
+
   try {
     return {
       success: true,
