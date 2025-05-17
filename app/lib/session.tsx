@@ -32,9 +32,10 @@ export async function createSession(userId: string) {
 
   cookieStore.set("session", session, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // true in production
+    secure:
+      process.env.NODE_ENV === "production" && process.env.USE_HTTPS === "true", // true in production
     expires: expiresAt,
-    sameSite: "strict",
+    sameSite: "lax",
     path: "/",
   });
 }
