@@ -76,7 +76,7 @@ export function EditUserDialog({
         onSubmitSuccess();
       }
     }
-  }, [state?.success, onOpenChange]);
+  }, [state?.success, onSubmitSuccess, onOpenChange, form]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

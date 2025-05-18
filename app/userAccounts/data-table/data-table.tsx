@@ -24,7 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { AddUserDialog } from "../dialogs/add-user-dialog";
 
 interface DataTableProps<TData, TValue> {
@@ -42,9 +42,9 @@ export function DataTable<TData, TValue>({
   );
   const [open, setOpen] = useState(false);
 
-  const handleSubmitSuccess = () => {
-    router.refresh(); // This will trigger a revalidation of the page
-  };
+  const handleSubmitSuccess = useCallback(() => {
+    router.refresh();
+  }, [router]);
 
   const table = useReactTable({
     data,

@@ -16,7 +16,7 @@ import { deleteUser } from "@/actions/userAccount";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { EditUserDialog } from "../dialogs/edit-user-dialog";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -34,10 +34,9 @@ function ActionsCell({ row }: { row: any }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const handleSubmitSuccess = () => {
-    setOpen(false);
-    // You can add additional success handling logic here if needed
-  };
+  const handleSubmitSuccess = useCallback(() => {
+    router.refresh();
+  }, [router]);
 
   const handleDelete = async () => {
     const result = await deleteUser(row.original.id);

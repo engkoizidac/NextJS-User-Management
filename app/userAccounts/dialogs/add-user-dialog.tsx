@@ -70,7 +70,7 @@ export function AddUserDialog({
         onSubmitSuccess(); // <-- trigger parent refresh
       }
     }
-  }, [state?.success, onOpenChange]);
+  }, [state?.success, onOpenChange, form, onSubmitSuccess]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
