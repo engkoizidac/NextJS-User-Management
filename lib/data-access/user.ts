@@ -1,8 +1,8 @@
 import { Status } from "@prisma/client";
-import { prisma } from "./prisma";
+import { prisma } from "../prisma";
 
 export default async function getUsers() {
-  const data = await prisma.user.findMany({
+  return await prisma.user.findMany({
     select: {
       id: true,
       username: true,
@@ -16,8 +16,6 @@ export default async function getUsers() {
       fullName: "asc",
     },
   });
-
-  return data;
 }
 
 export async function postUser(
@@ -74,6 +72,7 @@ export async function saveChangesOnUser(
         fullName: fullName,
         username: username,
         status: status,
+        updatedAt: new Date().toISOString(),
       },
     });
     return { success: true };

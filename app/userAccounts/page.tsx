@@ -1,4 +1,4 @@
-import getUsers from "@/lib/user";
+import getUsers from "@/lib/data-access/user";
 import { columns } from "./data-table/columns";
 import { DataTable } from "./data-table/data-table";
 

@@ -28,15 +28,6 @@ import { format } from "date-fns";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type User = {
-  id: string;
-  username: string;
-  password: string;
-  status: "Activated" | "Deactivated";
-  fullName: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
 
 function ActionsCell({ row }: { row: any }) {
   const [open, setOpen] = useState(false);
@@ -110,7 +101,7 @@ function ActionsCell({ row }: { row: any }) {
   );
 }
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "fullName",
     header: "Name of User",

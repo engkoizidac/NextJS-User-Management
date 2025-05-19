@@ -5,8 +5,9 @@ import bcrypt from "bcrypt";
 import { LoginFormSchema } from "@/lib/validation";
 import { redirect } from "next/navigation";
 import { createSession } from "@/app/lib/session";
-import getUsers from "@/lib/user";
+
 import { cookies } from "next/headers";
+import getUsers from "@/lib/data-access/user";
 
 export async function login(state: any, formData: FormData) {
   // Validate form fields

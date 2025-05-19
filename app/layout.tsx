@@ -16,7 +16,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className}>
       <body className={`antialiased`}>
-        <Toaster position="bottom-center" reverseOrder={false} />
+        <Toaster
+          position="bottom-center"
+          reverseOrder={false}
+          toastOptions={{
+            duration: 3000, // Toasts will auto-close after 2 seconds
+          }}
+        />
         <NavBar />
         {children}
       </body>

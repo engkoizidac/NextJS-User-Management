@@ -1,7 +1,7 @@
 "use server";
 
-import getUsers, { postUser, saveChangesOnUser } from "@/lib/user";
-import { removeUser } from "@/lib/user";
+import getUsers, { postUser, saveChangesOnUser } from "@/lib/data-access/user";
+import { removeUser } from "@/lib/data-access/user";
 import { UserAccountFormSchema } from "@/lib/validation";
 import bcrypt from "bcrypt";
 

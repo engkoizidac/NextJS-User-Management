@@ -30,6 +30,19 @@ const adminLinks = [
   },
 ];
 
+const adminLinks2 = [
+  {
+    title: "User Accounts",
+    href: "/userAccounts",
+    description: "Add, edit, and delete user accounts and manage their roles.",
+  },
+  {
+    title: "User Role Management",
+    href: "/userRoles",
+    description: "Manage user assigned roles and their permissions.",
+  },
+];
+
 export async function NavBar() {
   const authUser = await getAuthUser();
   return (
@@ -67,13 +80,13 @@ export async function NavBar() {
                 <NavigationMenuTrigger>Settings</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {adminLinks.map((users) => (
+                    {adminLinks.map((subMenus) => (
                       <ListItem
-                        key={users.title}
-                        title={users.title}
-                        href={users.href}
+                        key={subMenus.title}
+                        title={subMenus.title}
+                        href={subMenus.href}
                       >
-                        {users.description}
+                        {subMenus.description}
                       </ListItem>
                     ))}
                   </ul>
