@@ -1,0 +1,14 @@
+import { prisma } from "@/lib/prisma";
+
+export default async function getRoles() {
+  return prisma.role.findMany({
+    select: {
+      name: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+}
