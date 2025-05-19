@@ -1,6 +1,6 @@
 "use server";
 
-import getUsers, { postUser } from "@/lib/user";
+import getUsers, { postUser, saveChangesOnUser } from "@/lib/user";
 import { removeUser } from "@/lib/user";
 import { UserAccountFormSchema } from "@/lib/validation";
 import bcrypt from "bcrypt";
@@ -73,7 +73,6 @@ export async function updateUser(
   userId: string
 ) {
   const validatedFields = UserAccountFormSchema.safeParse({
-    id: formData.get("id"),
     fullName: formData.get("fullName"),
     username: formData.get("username"),
     status: formData.get("status"),
@@ -87,7 +86,8 @@ export async function updateUser(
 
   const { fullName, username, status } = validatedFields.data;
 
-  console.log(userId);
+  const user = await saveChangesOnUser(userId, fullName, username, status);
+  if (!user) return { errors: { username: "Server error!" } };
 
   try {
     return {

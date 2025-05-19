@@ -24,9 +24,9 @@ const adminLinks = [
     description: "Add, edit, and delete user accounts and manage their roles.",
   },
   {
-    title: "User Group Management",
-    href: "/",
-    description: "Manage user groups and their permissions.",
+    title: "User Role Management",
+    href: "/userRoles",
+    description: "Manage user assigned roles and their permissions.",
   },
 ];
 
@@ -64,7 +64,7 @@ export async function NavBar() {
               </NavigationMenuItem>
 
               <NavigationMenuItem>
-                <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
+                <NavigationMenuTrigger>Settings</NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {adminLinks.map((users) => (

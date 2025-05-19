@@ -27,7 +27,7 @@ export async function postUser(
   status: Status
 ) {
   try {
-    const newUser = await prisma.user.create({
+    await prisma.user.create({
       data: {
         fullName: fullName,
         username: username,
@@ -37,7 +37,7 @@ export async function postUser(
       },
     });
 
-    return newUser;
+    return { success: true };
   } catch (error) {
     console.error("Error creating user:", error);
     throw new Error("Failed to create user");
@@ -52,6 +52,30 @@ export async function removeUser(userId: string) {
       },
     });
 
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user. Please try again.");
+  }
+}
+
+export async function saveChangesOnUser(
+  userId: string,
+  fullName: string,
+  username: string,
+  status: Status
+) {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        fullName: fullName,
+        username: username,
+        status: status,
+      },
+    });
     return { success: true };
   } catch (error) {
     console.error("Error deleting user:", error);
