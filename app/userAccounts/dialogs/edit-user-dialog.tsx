@@ -2,7 +2,6 @@
 
 import { useActionState, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { Eye, EyeOff, Timer } from "lucide-react";
 
 import {
   Dialog,
@@ -29,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { updateUser } from "@/actions/userAccount";
+import { updateUser } from "@/actions/userAccountController";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
 

@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import YesNoDialog from "../dialogs/confirm-delete-user-dialog";
-import { deleteUser } from "@/actions/userAccount";
+import { deleteUser } from "@/actions/userAccountController";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { EditUserDialog } from "../dialogs/edit-user-dialog";

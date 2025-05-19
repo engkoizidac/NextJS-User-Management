@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { addUser } from "@/actions/userAccount";
+import { addUser } from "@/actions/userAccountController";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
 
