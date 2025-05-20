@@ -6,7 +6,7 @@ import getUsers, {
   saveChangesOnUser,
 } from "@/lib/data-access/user";
 import { removeUser } from "@/lib/data-access/user";
-import { UserAccountFormSchema } from "@/lib/validation";
+import { UserAccountFormSchema } from "@/lib/schema/userValidation";
 import bcrypt from "bcrypt";
 
 export async function addUser(prevState: any, formData: FormData) {

@@ -78,7 +78,7 @@ export function AddUserDialog({
         <DialogHeader>
           <DialogTitle>Add New User</DialogTitle>
           <DialogDescription>
-            Fill in the information for the new user. Click save when you're
+            Fill in the information for the new user. Click Add User when you're
             done.
           </DialogDescription>
         </DialogHeader>

@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React, { useCallback, useState } from "react";
+import { AddRoleDialog } from "../dialogs/add-role-dialog";
 //import { AddUserDialog } from "../dialogs/add-user-dialog";
 
 interface DataTableProps<TData, TValue> {
@@ -79,11 +80,11 @@ export function DataTable<TData, TValue>({
               Add Role
             </div>
           </button>
-          {/*           <AddUserDialog
+          <AddRoleDialog
             open={open}
             onOpenChange={setOpen}
             onSubmitSuccess={handleSubmitSuccess}
-          /> */}
+          />
         </div>
       </div>
       <div className="rounded-md border">
