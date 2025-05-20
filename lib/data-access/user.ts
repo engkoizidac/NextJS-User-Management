@@ -81,3 +81,20 @@ export async function saveChangesOnUser(
     throw new Error("Failed to delete user. Please try again.");
   }
 }
+
+export async function blankUserPassword(userId: string, password: string) {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password: password,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("Failed to delete user. Please try again.");
+  }
+}

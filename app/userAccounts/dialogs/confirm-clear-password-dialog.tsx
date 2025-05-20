@@ -18,20 +18,20 @@ interface YesNoDialogProps {
   userName: string;
 }
 
-export default function YesNoDialogDeleteUser({
+export default function YesNoDialogClearPassword({
   onConfirm,
   children,
   userName,
 }: YesNoDialogProps) {
   const [open, setOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
 
   const handleConfirm = async () => {
     try {
-      setIsDeleting(true);
+      setIsClearing(true);
       await onConfirm();
     } finally {
-      setIsDeleting(false);
+      setIsClearing(false);
       setOpen(false);
     }
   };
@@ -51,26 +51,26 @@ export default function YesNoDialogDeleteUser({
         <DialogHeader>
           <DialogTitle>Delete User</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete {userName}? This action cannot be
-            undone.
+            Are you sure you want to clear {userName}'s password? This action
+            cannot be undone.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex justify-end gap-2">
-          <Button onClick={() => setOpen(false)} disabled={isDeleting}>
+          <Button onClick={() => setOpen(false)} disabled={isClearing}>
             Cancel
           </Button>
           <Button
             variant="destructive"
             onClick={handleConfirm}
-            disabled={isDeleting}
+            disabled={isClearing}
           >
-            {isDeleting ? (
+            {isClearing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Deleting...
+                Clearing...
               </>
             ) : (
-              "Delete"
+              "Clear Password"
             )}
           </Button>
         </DialogFooter>

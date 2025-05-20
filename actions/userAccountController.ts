@@ -1,6 +1,10 @@
 "use server";
 
-import getUsers, { postUser, saveChangesOnUser } from "@/lib/data-access/user";
+import getUsers, {
+  blankUserPassword,
+  postUser,
+  saveChangesOnUser,
+} from "@/lib/data-access/user";
 import { removeUser } from "@/lib/data-access/user";
 import { UserAccountFormSchema } from "@/lib/validation";
 import bcrypt from "bcrypt";
@@ -62,7 +66,7 @@ export async function deleteUser(userId: string) {
     };
   } catch (error) {
     return {
-      error: "Failed to create user",
+      error: "Failed to delete user",
     };
   }
 }
@@ -96,6 +100,23 @@ export async function updateUser(
   } catch (error) {
     return {
       error: "Failed to update user",
+    };
+  }
+}
+
+export async function clearUserPassword(userId: string) {
+  const hashedPassword = await bcrypt.hash(<string>"", 10);
+
+  try {
+    const user = await blankUserPassword(userId, hashedPassword);
+    if (!user) return { errors: { username: "Server error!" } };
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to reset user password",
     };
   }
 }

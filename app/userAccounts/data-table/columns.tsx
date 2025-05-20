@@ -18,13 +18,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import YesNoDialog from "../dialogs/confirm-delete-user-dialog";
-import { deleteUser } from "@/actions/userAccountController";
+
+import { clearUserPassword, deleteUser } from "@/actions/userAccountController";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { EditUserDialog } from "../dialogs/edit-user-dialog";
 import { useCallback, useState } from "react";
 import { format } from "date-fns";
+import YesNoDialogDeleteUser from "../dialogs/confirm-delete-user-dialog";
+import YesNoDialogClearPassword from "../dialogs/confirm-clear-password-dialog";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -47,6 +49,16 @@ function ActionsCell({ row }: { row: any }) {
     }
   };
 
+  const handleClearPassword = async () => {
+    const result = await clearUserPassword(row.original.id);
+    if (result.success) {
+      toast.success("User password successfully cleared");
+      router.refresh();
+    } else {
+      toast.error("Failed to clear user password");
+    }
+  };
+
   return (
     <>
       <DropdownMenu>
@@ -65,7 +77,7 @@ function ActionsCell({ row }: { row: any }) {
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <YesNoDialog
+            <YesNoDialogDeleteUser
               onConfirm={handleDelete}
               userName={row.original.fullName}
             >
@@ -73,14 +85,19 @@ function ActionsCell({ row }: { row: any }) {
                 <Trash className="mr-2 h-4 w-4" />
                 Delete
               </div>
-            </YesNoDialog>
+            </YesNoDialogDeleteUser>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <div className="flex items-center">
-              <RotateCcwKey className="mr-2 h-4 w-4" />
-              Reset Password
-            </div>
+            <YesNoDialogClearPassword
+              onConfirm={handleClearPassword}
+              userName={row.original.fullName}
+            >
+              <div className="flex items-center">
+                <Trash className="mr-2 h-4 w-4" />
+                Clear Password
+              </div>
+            </YesNoDialogClearPassword>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
