@@ -98,9 +98,13 @@ export function EditUserDialog({
                   <FormControl>
                     <Input id="fullName" {...field} />
                   </FormControl>
-                  {state?.error && (
-                    <p className="text-sm text-red-500">{state.error}</p>
-                  )}
+                  {state?.errors &&
+                    "fullName" in state.errors &&
+                    state.errors.fullName && (
+                      <p className="text-sm text-red-500">
+                        {state.errors.fullName}
+                      </p>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -115,9 +119,13 @@ export function EditUserDialog({
                   <FormControl>
                     <Input id="username" {...field} />
                   </FormControl>
-                  {state?.error && (
-                    <p className="text-sm text-red-500">{state.error}</p>
-                  )}
+                  {state?.errors &&
+                    "username" in state.errors &&
+                    state.errors.username && (
+                      <p className="text-sm text-red-500">
+                        {state.errors.username}
+                      </p>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -150,9 +158,13 @@ export function EditUserDialog({
                       </SelectItem>
                     </SelectContent>
                   </Select>
-                  {state?.error && (
-                    <p className="text-sm text-red-500">{state.error}</p>
-                  )}
+                  {state?.errors &&
+                    "status" in state.errors &&
+                    state.errors.status && (
+                      <p className="text-sm text-red-500">
+                        {state.errors.status}
+                      </p>
+                    )}
                   <FormMessage />
                 </FormItem>
               )}

@@ -18,24 +18,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-//import YesNoDialog from "../dialogs/confirm-delete-role-dialog";
 import { deleteUser } from "@/actions/userAccountController";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-//import { EditUserDialog } from "../dialogs/edit-user-dialog";
 import { useCallback, useState } from "react";
 import { format } from "date-fns";
-
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { EditRoleDialog } from "../dialogs/edit-role-dialog";
 
 function ActionsCell({ row }: { row: any }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  // const handleSubmitSuccess = useCallback(() => {
-  //   router.refresh();
-  // }, [router]);
+  const handleSubmitSuccess = useCallback(() => {
+    router.refresh();
+  }, [router]);
 
   // const handleDelete = async () => {
   //   const result = await deleteUser(row.original.id);
@@ -79,6 +75,12 @@ function ActionsCell({ row }: { row: any }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <EditRoleDialog
+        open={open}
+        onOpenChange={setOpen}
+        onSubmitSuccess={handleSubmitSuccess}
+        role={row.original}
+      />
     </>
   );
 }

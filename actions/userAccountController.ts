@@ -3,7 +3,7 @@
 import getUsers, {
   blankUserPassword,
   postUser,
-  saveChangesOnUser,
+  patchUser,
 } from "@/lib/data-access/user";
 import { removeUser } from "@/lib/data-access/user";
 import { UserAccountFormSchema } from "@/lib/schema/userValidation";
@@ -33,7 +33,7 @@ export async function addUser(prevState: any, formData: FormData) {
       (user) => user.username === username
     );
     if (existingUser)
-      return { errors: { username: "Username already exists." } };
+      return { errors: { username: "Username already exists!" } };
 
     const hashedPassword = await bcrypt.hash(<string>password, 10);
 
@@ -66,7 +66,7 @@ export async function deleteUser(userId: string) {
     };
   } catch (error) {
     return {
-      error: "Failed to delete user",
+      error: "Failed to delete user!",
     };
   }
 }
@@ -89,17 +89,19 @@ export async function updateUser(
   }
 
   const { fullName, username, status } = validatedFields.data;
-
-  const user = await saveChangesOnUser(userId, fullName, username, status);
-  if (!user) return { errors: { username: "Server error!" } };
-
   try {
+    const user = await patchUser(userId, fullName, username, status);
+    if (!user) return { errors: { username: "Server error!" } };
+
     return {
       success: true,
     };
   } catch (error) {
     return {
-      error: "Failed to update user",
+      error: "Failed to update user!",
+      errors: {
+        username: "You are renaming to a username that already exist!",
+      },
     };
   }
 }
@@ -116,7 +118,7 @@ export async function clearUserPassword(userId: string) {
     };
   } catch (error) {
     return {
-      error: "Failed to reset user password",
+      error: "Failed to reset user password!",
     };
   }
 }

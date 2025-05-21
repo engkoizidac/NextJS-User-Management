@@ -47,7 +47,7 @@ export function AddRoleDialog({
   useEffect(() => {
     if (state?.success) {
       onOpenChange(false);
-      toast.success("New role added successfully");
+      toast.success("New role added successfully!");
       form.reset();
 
       if (onSubmitSuccess) {
@@ -91,10 +91,14 @@ export function AddRoleDialog({
             />
             <DialogFooter>
               <Button type="submit" id="submit-role" disabled={isPending}>
-                {isPending && (
-                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                {isPending ? (
+                  <>
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                    Adding...
+                  </>
+                ) : (
+                  "Add Role"
                 )}
-                Add Role
               </Button>
             </DialogFooter>
           </form>

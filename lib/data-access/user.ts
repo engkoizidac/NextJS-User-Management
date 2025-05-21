@@ -38,7 +38,7 @@ export async function postUser(
     return { success: true };
   } catch (error) {
     console.error("Error creating user:", error);
-    throw new Error("Failed to create user");
+    throw new Error("Failed to create user!");
   }
 }
 
@@ -53,11 +53,11 @@ export async function removeUser(userId: string) {
     return { success: true };
   } catch (error) {
     console.error("Error deleting user:", error);
-    throw new Error("Failed to delete user. Please try again.");
+    throw new Error("Failed to delete user. Please try again!");
   }
 }
 
-export async function saveChangesOnUser(
+export async function patchUser(
   userId: string,
   fullName: string,
   username: string,
@@ -77,8 +77,8 @@ export async function saveChangesOnUser(
     });
     return { success: true };
   } catch (error) {
-    console.error("Error deleting user:", error);
-    throw new Error("Failed to delete user. Please try again.");
+    console.error("Error update changes on user:", error);
+    throw new Error("Failed to update changes on user!");
   }
 }
 
@@ -94,7 +94,7 @@ export async function blankUserPassword(userId: string, password: string) {
     });
     return { success: true };
   } catch (error) {
-    console.error("Error deleting user:", error);
-    throw new Error("Failed to delete user. Please try again.");
+    console.error("Error on clearing user password:", error);
+    throw new Error("Failed on clearing user password. Please try again.");
   }
 }
