@@ -3,12 +3,10 @@
 import getRoles, { postRole } from "@/lib/data-access/role";
 import { RoleFormSchema } from "@/lib/schema/roleValidation";
 
-export async function addRole(prevState: any, formData: FormData) {
+export async function createRole(prevState: any, formData: FormData) {
   const validatedFields = RoleFormSchema.safeParse({
     name: formData.get("name"),
   });
-
-  console.log(formData.get("name"));
 
   if (!validatedFields.success) {
     return {
@@ -31,6 +29,30 @@ export async function addRole(prevState: any, formData: FormData) {
 
     if (!user) return { errors: { username: "Server error!" } };
 
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to create new role",
+    };
+  }
+}
+
+export async function updateRole(prevState: any, formData: FormData) {
+  const validatedFields = RoleFormSchema.safeParse({
+    name: formData.get("name"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { name } = validatedFields.data;
+
+  try {
     return {
       success: true,
     };

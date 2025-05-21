@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
-import { addRole } from "@/actions/roleController";
+import { createRole } from "@/actions/roleController";
 
 type AddRoleDialogProps = {
   open: boolean;
@@ -36,7 +36,7 @@ export function AddRoleDialog({
   onOpenChange,
   onSubmitSuccess,
 }: AddRoleDialogProps) {
-  const [state, action, isPending] = useActionState(addRole, undefined);
+  const [state, action, isPending] = useActionState(createRole, undefined);
 
   const form = useForm({
     defaultValues: {
