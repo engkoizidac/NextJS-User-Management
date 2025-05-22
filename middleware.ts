@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import getAuthUser from "./actions/getAuthUser";
 
-const protectedRoutes = ["/dashboard", "/userAccounts"];
+const protectedRoutes = ["/dashboard", "/userAccounts", "/userRoles", "/posts"];
 const publicRoutes = ["/login"];
 
 export default async function middleware(req: { nextUrl: URL }) {
   const path = req.nextUrl.pathname;
-  const isProtected =
-    protectedRoutes.includes(path) || path.startsWith("/posts/edit/");
+  // Extract the base path for protected route matching
+  const basePath = path.split("/")[1] ? `/${path.split("/")[1]}` : path;
+  const isProtected = protectedRoutes.includes(basePath);
   const isPublic = publicRoutes.includes(path);
 
   const user = await getAuthUser();
@@ -18,8 +19,11 @@ export default async function middleware(req: { nextUrl: URL }) {
   }
 
   if (isPublic && userId) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    return NextResponse.redirect(new URL("/", req.nextUrl));
   }
 
   return NextResponse.next();
 }
+export const config = {
+  matcher: ["/userAccounts/:slug*", "/userRoles/:slug*"],
+};

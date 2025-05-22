@@ -18,6 +18,26 @@ export default async function getUsers() {
   });
 }
 
+export async function getUserById(userId: string) {
+  try {
+    return prisma.user.findUnique({
+      select: {
+        id: true,
+        fullName: true,
+        username: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: {
+        id: userId,
+      },
+    });
+  } catch (error) {
+    console.error("Error retreiving user data!", error);
+    throw new Error("Failed to retreiving user!");
+  }
+}
+
 export async function postUser(
   fullName: string,
   username: string,

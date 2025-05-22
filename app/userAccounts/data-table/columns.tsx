@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import {
+  LaptopMinimalCheck,
   MoreHorizontal,
   Pencil,
   RotateCcwKey,
@@ -27,6 +28,7 @@ import { useCallback, useState } from "react";
 import { format } from "date-fns";
 import YesNoDialogDeleteUser from "../dialogs/confirm-delete-user-dialog";
 import YesNoDialogClearPassword from "../dialogs/confirm-clear-password-dialog";
+import Link from "next/link";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -100,11 +102,14 @@ function ActionsCell({ row }: { row: any }) {
             </YesNoDialogClearPassword>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <div className="flex items-center">
-              <Users className="mr-2 h-4 w-4" />
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/userAccounts/${row.original.id}`}
+              className="flex items-center w-full"
+            >
+              <LaptopMinimalCheck className="mr-2 h-4 w-4" />
               Assigned Roles
-            </div>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
