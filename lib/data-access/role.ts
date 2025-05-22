@@ -19,6 +19,25 @@ export default async function getRoles() {
   }
 }
 
+export async function getRoleById(roleId: number) {
+  try {
+    return prisma.role.findUnique({
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: {
+        id: roleId,
+      },
+    });
+  } catch (error) {
+    console.error("Error retreiving role data!", error);
+    throw new Error("Failed to retreiving role!");
+  }
+}
+
 export async function postRole(name: string) {
   try {
     await prisma.role.create({
@@ -32,6 +51,20 @@ export async function postRole(name: string) {
   } catch (error) {
     console.error("Error creating role!", error);
     throw new Error("Failed to create new role!");
+  }
+}
+
+export async function removeRole(roleId: number) {
+  try {
+    await prisma.role.delete({
+      where: {
+        id: roleId,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting role:", error);
+    throw new Error("Failed to delete role. Please try again!");
   }
 }
 

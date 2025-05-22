@@ -1,6 +1,10 @@
 "use server";
 
-import getRoles, { patchRole, postRole } from "@/lib/data-access/role";
+import getRoles, {
+  patchRole,
+  postRole,
+  removeRole,
+} from "@/lib/data-access/role";
 import { RoleFormSchema } from "@/lib/schema/roleValidation";
 import { errors } from "jose";
 
@@ -36,6 +40,21 @@ export async function createRole(prevState: any, formData: FormData) {
   } catch (error) {
     return {
       error: "Failed to create new role!",
+    };
+  }
+}
+
+export async function deleteRole(roleId: number) {
+  try {
+    const role = await removeRole(roleId);
+    if (!role) return { errors: { rolename: "Server error!" } };
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to delete role!",
     };
   }
 }

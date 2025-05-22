@@ -8,13 +8,14 @@ datasource db {
 }
 
 model user {
-  id        String   @id @default(uuid())
-  username  String   @unique(map: "User_username_key")
+  id        String      @id @default(uuid())
+  username  String      @unique(map: "User_username_key")
   password  String
   fullName  String
-  status    Status   @default(Activated)
-  createdAt DateTime @default(now())
+  status    Status      @default(Activated)
+  createdAt DateTime    @default(now())
   updatedAt DateTime
+  user_role user_role[]
 }
 
 enum Status {
@@ -23,8 +24,31 @@ enum Status {
 }
 
 model role {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique(map: "Role_name_key")
-  createdAt DateTime @default(now())
+  id        Int         @id @default(autoincrement())
+  name      String      @unique(map: "Role_name_key")
+  createdAt DateTime    @default(now())
   updatedAt DateTime
+  user_role user_role[]
+}
+
+model menu_main {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique(map: "Menu_name_key")
+  childMenus menu_child[]
+}
+
+model menu_child {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique(map: "SubMenu_name_key")
+  link       String
+  menuMainId Int
+  menuMain   menu_main @relation(fields: [menuMainId], references: [id])
+}
+
+model user_role {
+  id     Int    @id @default(autoincrement())
+  userId String @unique(map: "User_role_userId_key")
+  roleId Int
+  role   role   @relation(fields: [roleId], references: [id])
+  user   user   @relation(fields: [userId], references: [id])
 }

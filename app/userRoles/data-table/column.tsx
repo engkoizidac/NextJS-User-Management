@@ -5,9 +5,7 @@ import {
   LaptopMinimalCheck,
   MoreHorizontal,
   Pencil,
-  Router,
   Trash,
-  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,12 +16,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteUser } from "@/actions/userAccountController";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { format } from "date-fns";
 import { EditRoleDialog } from "../dialogs/edit-role-dialog";
+import { deleteRole } from "@/actions/roleController";
+import YesNoDialogDeleteRole from "../dialogs/confirm-delete-role-dialog";
+import Link from "next/link";
 
 function ActionsCell({ row }: { row: any }) {
   const [open, setOpen] = useState(false);
@@ -33,15 +33,15 @@ function ActionsCell({ row }: { row: any }) {
     router.refresh();
   }, [router]);
 
-  // const handleDelete = async () => {
-  //   const result = await deleteUser(row.original.id);
-  //   if (result.success) {
-  //     toast.success("User deleted successfully");
-  //     router.refresh();
-  //   } else {
-  //     toast.error("Failed to delete user");
-  //   }
-  // };
+  const handleDelete = async () => {
+    const result = await deleteRole(row.original.id);
+    if (result.success) {
+      toast.success("Role deleted successfully");
+      router.refresh();
+    } else {
+      toast.error("Failed to delete role");
+    }
+  };
 
   return (
     <>
@@ -61,17 +61,25 @@ function ActionsCell({ row }: { row: any }) {
             </div>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <div className="flex items-center">
-              <Trash className="mr-2 h-4 w-4" />
-              Delete
-            </div>
+            <YesNoDialogDeleteRole
+              onConfirm={handleDelete}
+              roleName={row.original.name}
+            >
+              <div className="flex items-center">
+                <Trash className="mr-2 h-4 w-4" />
+                Delete
+              </div>
+            </YesNoDialogDeleteRole>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <div className="flex items-center">
+          <DropdownMenuItem asChild>
+            <Link
+              href={`/userRoles/${row.original.id}`}
+              className="flex items-center w-full"
+            >
               <LaptopMinimalCheck className="mr-2 h-4 w-4" />
               Access Privileges
-            </div>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
