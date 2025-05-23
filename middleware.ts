@@ -24,6 +24,3 @@ export default async function middleware(req: { nextUrl: URL }) {
 
   return NextResponse.next();
 }
-export const config = {
-  matcher: ["/userAccounts/:slug*", "/userRoles/:slug*"],
-};

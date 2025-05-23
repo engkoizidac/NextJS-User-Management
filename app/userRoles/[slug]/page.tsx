@@ -1,5 +1,13 @@
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@/components/ui/card";
 import { getRoleById } from "@/lib/data-access/role";
-import { StepBack } from "lucide-react";
+import { PlusCircle, StepBack } from "lucide-react";
 
 export default async function AccessPrivilegesPage({
   params,
@@ -8,6 +16,7 @@ export default async function AccessPrivilegesPage({
 }) {
   const roleId = Number((await params).slug);
   const role = await getRoleById(roleId);
+
   return (
     <div className="justify-center items-center ">
       <div className="container mx-auto py-8 ">

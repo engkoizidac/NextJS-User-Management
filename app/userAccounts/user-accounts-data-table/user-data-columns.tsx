@@ -5,10 +5,7 @@ import {
   LaptopMinimalCheck,
   MoreHorizontal,
   Pencil,
-  RotateCcwKey,
-  Router,
   Trash,
-  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,11 +20,11 @@ import {
 import { clearUserPassword, deleteUser } from "@/actions/userAccountController";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { EditUserDialog } from "../dialogs/edit-user-dialog";
+import { EditUserDialog } from "../user-accounts-dialogs/edit-user-dialog";
 import { useCallback, useState } from "react";
 import { format } from "date-fns";
-import YesNoDialogDeleteUser from "../dialogs/confirm-delete-user-dialog";
-import YesNoDialogClearPassword from "../dialogs/confirm-clear-password-dialog";
+import YesNoDialogDeleteUser from "../user-accounts-dialogs/confirm-delete-user-dialog";
+import YesNoDialogClearPassword from "../user-accounts-dialogs/confirm-clear-password-dialog";
 import Link from "next/link";
 
 // This type is used to define the shape of our data.

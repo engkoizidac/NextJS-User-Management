@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React, { useCallback, useState } from "react";
-import { AddUserDialog } from "../dialogs/add-user-dialog";
+import { AddUserDialog } from "../user-accounts-dialogs/add-user-dialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
