@@ -1,6 +1,6 @@
 import getUsers from "@/lib/data-access/user";
-import { columns } from "./data-table/columns";
-import { DataTable } from "./data-table/data-table";
+import { columns } from "./user-accounts-data-table/user-data-columns";
+import { DataTable } from "./user-accounts-data-table/user-data-table";
 
 // Add revalidation
 export const revalidate = 0; // This ensures the page is always fresh
