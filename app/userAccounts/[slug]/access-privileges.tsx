@@ -11,11 +11,20 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import getRoles from "@/lib/data-access/role";
+import { DataTable } from "./access-privileges-data-table/available-role-table/available-role-data-table";
+import { columns } from "./access-privileges-data-table/available-role-table/available-role-columns";
 // Uncomment and use your real tables:
 // import AvailableRolesTable from "@/components/AvailableRolesTable";
 // import AssignedRolesTable from "@/components/AssignedRolesTable";
 
-export default function AccessPrivilegesPage({ user }: { user: any }) {
+export default function AccessPrivilegesPage({
+  user,
+  availableRoles,
+}: {
+  user: any;
+  availableRoles: any[];
+}) {
   const [selectedAvailableRoles, setSelectedAvailableRoles] = useState<any[]>(
     []
   );
@@ -73,11 +82,11 @@ export default function AccessPrivilegesPage({ user }: { user: any }) {
                   )}
                 </Button>
               </div>
-              {/* <AvailableRolesTable
-                roles={availableRoles}
-                selectedRoles={selectedAvailableRoles}
-                setSelectedRoles={setSelectedAvailableRoles}
-              /> */}
+              <DataTable
+                columns={columns}
+                data={availableRoles}
+                key={Date.now()} // Force re-render on data changes
+              />
             </CardContent>
           </Card>
 

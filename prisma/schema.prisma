@@ -38,11 +38,12 @@ model menu_main {
 }
 
 model menu_child {
-  id         Int       @id @default(autoincrement())
-  name       String    @unique(map: "SubMenu_name_key")
-  link       String
-  menuMainId Int
-  menuMain   menu_main @relation(fields: [menuMainId], references: [id])
+  id          Int       @id @default(autoincrement())
+  name        String    @unique(map: "SubMenu_name_key")
+  description String
+  link        String
+  menuMainId  Int
+  menuMain    menu_main @relation(fields: [menuMainId], references: [id])
 }
 
 model user_role {
