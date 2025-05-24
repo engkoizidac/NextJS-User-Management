@@ -62,7 +62,6 @@ export async function getAvailableRoleNotAssigned(userId: string) {
         },
       },
     });
-    console.log("Excluded IDs:", excludedIds);
   } catch (error) {
     console.error("Error retreiving role data!", error);
     throw new Error("Failed to retreiving role!");

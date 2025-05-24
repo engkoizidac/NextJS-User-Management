@@ -10,10 +10,11 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import getRoles from "@/lib/data-access/role";
-import { DataTable } from "./access-privileges-data-table/available-role-table/available-role-data-table";
-import { columns } from "./access-privileges-data-table/available-role-table/available-role-columns";
+
+import { columns } from "./available-role-columns";
+import { DataTable } from "@/components/ui/data-table-with-select";
 // Uncomment and use your real tables:
 // import AvailableRolesTable from "@/components/AvailableRolesTable";
 // import AssignedRolesTable from "@/components/AssignedRolesTable";
@@ -29,9 +30,22 @@ export default function AccessPrivilegesPage({
     []
   );
   const [selectedAssignedRoles, setSelectedAssignedRoles] = useState<any[]>([]);
+  const [search, setSearch] = useState("");
 
-  const assignRoles = () => {};
+  const assignRoles = () => {
+    // Logic to assign roles
+    //  console.log("Assigning roles:", selectedAvailableRoles);
+    // You can call an API or perform any action here
+    selectedAvailableRoles.forEach((role) => {
+      console.log(`Assigning role: ${role.name}`);
+    });
+  };
   const unassignRoles = () => {};
+
+  // Filter availableRoles based on search
+  const filteredAvailableRoles = availableRoles.filter((role: any) =>
+    role.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="justify-center items-center ">
@@ -82,10 +96,21 @@ export default function AccessPrivilegesPage({
                   )}
                 </Button>
               </div>
+              <div className="flex items-center py-4 justify-between">
+                <Input
+                  placeholder="Search role here..."
+                  value={search}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setSearch(e.target.value)
+                  }
+                  className="max-w-sm h-11"
+                />
+              </div>
               <DataTable
                 columns={columns}
-                data={availableRoles}
-                key={Date.now()} // Force re-render on data changes
+                data={filteredAvailableRoles}
+                onSelectionChange={setSelectedAvailableRoles}
+                key="available-roles-table"
               />
             </CardContent>
           </Card>
