@@ -11,10 +11,15 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState, startTransition } from "react";
+import { useActionState } from "react";
+import { assignRolesAction } from "@/actions/userRoleController";
+import { useRouter } from "next/navigation";
 
 import { columns } from "./available-role-columns";
 import { DataTable } from "@/components/ui/data-table-with-select";
+import Icons from "@/components/ui/icons";
+
 // Uncomment and use your real tables:
 // import AvailableRolesTable from "@/components/AvailableRolesTable";
 // import AssignedRolesTable from "@/components/AssignedRolesTable";
@@ -26,20 +31,38 @@ export default function AccessPrivilegesPage({
   user: any;
   availableRoles: any[];
 }) {
+  const router = useRouter();
   const [selectedAvailableRoles, setSelectedAvailableRoles] = useState<any[]>(
     []
   );
   const [selectedAssignedRoles, setSelectedAssignedRoles] = useState<any[]>([]);
   const [search, setSearch] = useState("");
 
+  const [assignState, assignRolesActionState, isPending] = useActionState(
+    async (state: any, assignments: { userId: string; roleId: number }[]) => {
+      return await assignRolesAction(assignments);
+    },
+    null
+  );
+
   const assignRoles = () => {
-    // Logic to assign roles
-    //  console.log("Assigning roles:", selectedAvailableRoles);
-    // You can call an API or perform any action here
-    selectedAvailableRoles.forEach((role) => {
-      console.log(`Assigning role: ${role.name}`);
+    const assignments = selectedAvailableRoles.map((role) => ({
+      userId: user.id,
+      roleId: role.id,
+    }));
+    startTransition(() => {
+      assignRolesActionState(assignments);
     });
   };
+
+  useEffect(() => {
+    if (assignState?.success) {
+      setSelectedAvailableRoles([]);
+      // Optionally, trigger a refresh or refetch here if you have a fetcher
+      router.refresh(); // Refresh data after successful assign
+    }
+  }, [assignState?.success, router]);
+
   const unassignRoles = () => {};
 
   // Filter availableRoles based on search
@@ -84,12 +107,19 @@ export default function AccessPrivilegesPage({
               <div className="mb-4">
                 <Button
                   onClick={assignRoles}
-                  disabled={selectedAvailableRoles.length === 0}
+                  disabled={selectedAvailableRoles.length === 0 || isPending}
                   className="w-full sm:w-auto transition-all duration-200 flex items-center gap-2"
                 >
-                  <PlusCircle className="h-4 w-4" />
+                  {isPending ? (
+                    <>
+                      <Icons.spinner className="animate-spin mr-2 h-4 w-4 border-2 border-t-transparent border-current rounded-full" />
+                      ..Assigning
+                    </>
+                  ) : (
+                    <PlusCircle className="h-4 w-4" />
+                  )}
                   Assign Selected
-                  {selectedAvailableRoles.length > 0 && (
+                  {selectedAvailableRoles.length > 0 && !isPending && (
                     <span className="ml-1 bg-primary-foreground text-primary rounded-full px-2 py-0.5 text-xs font-medium">
                       {selectedAvailableRoles.length}
                     </span>
