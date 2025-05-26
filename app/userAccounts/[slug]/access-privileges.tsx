@@ -23,31 +23,35 @@ import Icons from "@/components/ui/icons";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table-with-select";
 
-// Uncomment and use your real tables:
-// import AvailableRolesTable from "@/components/AvailableRolesTable";
-// import AssignedRolesTable from "@/components/AssignedRolesTable";
+type Role = {
+  id: number;
+  name: string;
+};
+
+interface User {
+  id: string;
+  fullName: string;
+}
 
 export default function AccessPrivilegesPage({
   user,
   availableRoles,
   assignedRoles,
 }: {
-  user: any;
-  availableRoles: any[];
-  assignedRoles: any[];
+  user: User;
+  availableRoles: Role[];
+  assignedRoles: Role[];
 }) {
   const router = useRouter();
-  const [selectedAvailableRoles, setSelectedAvailableRoles] = useState<any[]>(
+  const [selectedAvailableRoles, setSelectedAvailableRoles] = useState<Role[]>(
     []
   );
-  const [selectedAssignedRoles, setSelectedAssignedRoles] = useState<any[]>([]);
+  const [selectedAssignedRoles, setSelectedAssignedRoles] = useState<Role[]>(
+    []
+  );
 
   const [searchAvailableRole, setSearchAvailableRole] = useState("");
   const [searchAssignedRole, setSearchAssignedRole] = useState("");
-
-  const [availableRolesState, setAvailableRolesState] =
-    useState(availableRoles);
-  const [assignedRolesState, setAssignedRolesState] = useState(assignedRoles);
 
   const [assignState, assignRolesActionState, isAssigningPending] =
     useActionState(
@@ -57,7 +61,7 @@ export default function AccessPrivilegesPage({
       null
     );
 
-  const [unAssignState, unAssignRolesActionState, isUnAssiningPending] =
+  const [unAssignState, unAssignRolesActionState, isUnAssigningPending] =
     useActionState(
       async (state: any, assignments: { userId: string; roleId: number }[]) => {
         return await unAssignRolesAction(assignments);
@@ -72,8 +76,8 @@ export default function AccessPrivilegesPage({
     }));
     startTransition(() => {
       assignRolesActionState(selectedAvailableAssignments);
+      router.refresh();
     });
-    router.refresh();
   };
 
   useEffect(() => {
@@ -82,9 +86,8 @@ export default function AccessPrivilegesPage({
       setSelectedAssignedRoles([]);
       setSearchAvailableRole("");
       setSearchAssignedRole("");
-      router.refresh();
     }
-  }, [assignState?.success, unAssignState?.success, router]);
+  }, [assignState?.success, unAssignState?.success]);
 
   const unassignRoles = () => {
     const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
@@ -93,8 +96,8 @@ export default function AccessPrivilegesPage({
     }));
     startTransition(() => {
       unAssignRolesActionState(selectedAssignedAssignments);
+      router.refresh();
     });
-    router.refresh();
   };
 
   // Filter availableRoles based on search
@@ -199,13 +202,21 @@ export default function AccessPrivilegesPage({
                   variant="outline"
                   className="w-full sm:w-auto transition-all duration-200 flex items-center gap-2"
                 >
-                  <MinusCircle className="h-4 w-4" />
-                  Unassign Selected
-                  {selectedAssignedRoles.length > 0 && (
-                    <span className="ml-1 bg-muted text-muted-foreground rounded-full px-2 py-0.5 text-xs font-medium">
-                      {selectedAssignedRoles.length}
-                    </span>
+                  {isUnAssigningPending ? (
+                    <>
+                      <Icons.spinner className="animate-spin mr-2 h-4 w-4 border-2 border-t-transparent border-current rounded-full" />
+                      ..Assigning
+                    </>
+                  ) : (
+                    <MinusCircle className="h-4 w-4" />
                   )}
+                  Un-Assign Selected
+                  {selectedAssignedRoles.length > 0 &&
+                    !isUnAssigningPending && (
+                      <span className="ml-1 bg-primary-foreground text-primary rounded-full px-2 py-0.5 text-xs font-medium">
+                        {selectedAssignedRoles.length}
+                      </span>
+                    )}
                 </Button>
               </div>
               <div className="flex items-center py-4 justify-between">

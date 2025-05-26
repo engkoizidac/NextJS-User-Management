@@ -3,7 +3,12 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export const columns: ColumnDef<any>[] = [
+interface Role {
+  id: number;
+  name: string;
+}
+
+export const columns: ColumnDef<Role>[] = [
   {
     id: "select",
     header: ({ table }) => (
