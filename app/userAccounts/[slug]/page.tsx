@@ -1,6 +1,6 @@
 import { getUserById } from "@/lib/data-access/user";
 import AccessPrivilegesPage from "./access-privileges";
-import { getAvailableRoleNotAssigned } from "@/lib/data-access/role";
+import { getAssignedRoles, getNotAssignedRoles } from "@/lib/data-access/role";
 
 export default async function Page({
   params,
@@ -8,7 +8,14 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const user = await getUserById((await params).slug);
-  const availableRoles = await getAvailableRoleNotAssigned((await params).slug);
+  const availableRoles = await getNotAssignedRoles((await params).slug);
+  const assignedRoles = await getAssignedRoles((await params).slug);
 
-  return <AccessPrivilegesPage user={user} availableRoles={availableRoles} />;
+  return (
+    <AccessPrivilegesPage
+      user={user}
+      availableRoles={availableRoles}
+      assignedRoles={assignedRoles}
+    />
+  );
 }

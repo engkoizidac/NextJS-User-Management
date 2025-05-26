@@ -13,12 +13,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, startTransition } from "react";
 import { useActionState } from "react";
-import { assignRolesAction } from "@/actions/userRoleController";
+import {
+  assignRolesAction,
+  unAssignRolesAction,
+} from "@/actions/userRoleController";
 import { useRouter } from "next/navigation";
 
-import { columns } from "./available-role-columns";
-import { DataTable } from "@/components/ui/data-table-with-select";
 import Icons from "@/components/ui/icons";
+import { columns } from "./columns";
+import { DataTable } from "@/components/ui/data-table-with-select";
 
 // Uncomment and use your real tables:
 // import AvailableRolesTable from "@/components/AvailableRolesTable";
@@ -27,47 +30,80 @@ import Icons from "@/components/ui/icons";
 export default function AccessPrivilegesPage({
   user,
   availableRoles,
+  assignedRoles,
 }: {
   user: any;
   availableRoles: any[];
+  assignedRoles: any[];
 }) {
   const router = useRouter();
   const [selectedAvailableRoles, setSelectedAvailableRoles] = useState<any[]>(
     []
   );
   const [selectedAssignedRoles, setSelectedAssignedRoles] = useState<any[]>([]);
-  const [search, setSearch] = useState("");
 
-  const [assignState, assignRolesActionState, isPending] = useActionState(
-    async (state: any, assignments: { userId: string; roleId: number }[]) => {
-      return await assignRolesAction(assignments);
-    },
-    null
-  );
+  const [searchAvailableRole, setSearchAvailableRole] = useState("");
+  const [searchAssignedRole, setSearchAssignedRole] = useState("");
+
+  const [availableRolesState, setAvailableRolesState] =
+    useState(availableRoles);
+  const [assignedRolesState, setAssignedRolesState] = useState(assignedRoles);
+
+  const [assignState, assignRolesActionState, isAssigningPending] =
+    useActionState(
+      async (state: any, assignments: { userId: string; roleId: number }[]) => {
+        return await assignRolesAction(assignments);
+      },
+      null
+    );
+
+  const [unAssignState, unAssignRolesActionState, isUnAssiningPending] =
+    useActionState(
+      async (state: any, assignments: { userId: string; roleId: number }[]) => {
+        return await unAssignRolesAction(assignments);
+      },
+      null
+    );
 
   const assignRoles = () => {
-    const assignments = selectedAvailableRoles.map((role) => ({
+    const selectedAvailableAssignments = selectedAvailableRoles.map((role) => ({
       userId: user.id,
       roleId: role.id,
     }));
     startTransition(() => {
-      assignRolesActionState(assignments);
+      assignRolesActionState(selectedAvailableAssignments);
     });
+    router.refresh();
   };
 
   useEffect(() => {
-    if (assignState?.success) {
+    if (assignState?.success || unAssignState?.success) {
       setSelectedAvailableRoles([]);
-      // Optionally, trigger a refresh or refetch here if you have a fetcher
-      router.refresh(); // Refresh data after successful assign
+      setSelectedAssignedRoles([]);
+      setSearchAvailableRole("");
+      setSearchAssignedRole("");
+      router.refresh();
     }
-  }, [assignState?.success, router]);
+  }, [assignState?.success, unAssignState?.success, router]);
 
-  const unassignRoles = () => {};
+  const unassignRoles = () => {
+    const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
+      userId: user.id,
+      roleId: role.id,
+    }));
+    startTransition(() => {
+      unAssignRolesActionState(selectedAssignedAssignments);
+    });
+    router.refresh();
+  };
 
   // Filter availableRoles based on search
   const filteredAvailableRoles = availableRoles.filter((role: any) =>
-    role.name.toLowerCase().includes(search.toLowerCase())
+    role.name.toLowerCase().includes(searchAvailableRole.toLowerCase())
+  );
+
+  const filteredAssignedRoles = assignedRoles.filter((role: any) =>
+    role.name.toLowerCase().includes(searchAssignedRole.toLowerCase())
   );
 
   return (
@@ -107,10 +143,12 @@ export default function AccessPrivilegesPage({
               <div className="mb-4">
                 <Button
                   onClick={assignRoles}
-                  disabled={selectedAvailableRoles.length === 0 || isPending}
+                  disabled={
+                    selectedAvailableRoles.length === 0 || isAssigningPending
+                  }
                   className="w-full sm:w-auto transition-all duration-200 flex items-center gap-2"
                 >
-                  {isPending ? (
+                  {isAssigningPending ? (
                     <>
                       <Icons.spinner className="animate-spin mr-2 h-4 w-4 border-2 border-t-transparent border-current rounded-full" />
                       ..Assigning
@@ -119,7 +157,7 @@ export default function AccessPrivilegesPage({
                     <PlusCircle className="h-4 w-4" />
                   )}
                   Assign Selected
-                  {selectedAvailableRoles.length > 0 && !isPending && (
+                  {selectedAvailableRoles.length > 0 && !isAssigningPending && (
                     <span className="ml-1 bg-primary-foreground text-primary rounded-full px-2 py-0.5 text-xs font-medium">
                       {selectedAvailableRoles.length}
                     </span>
@@ -129,9 +167,9 @@ export default function AccessPrivilegesPage({
               <div className="flex items-center py-4 justify-between">
                 <Input
                   placeholder="Search role here..."
-                  value={search}
+                  value={searchAvailableRole}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSearch(e.target.value)
+                    setSearchAvailableRole(e.target.value)
                   }
                   className="max-w-sm h-11"
                 />
@@ -140,7 +178,8 @@ export default function AccessPrivilegesPage({
                 columns={columns}
                 data={filteredAvailableRoles}
                 onSelectionChange={setSelectedAvailableRoles}
-                key="available-roles-table"
+                //key="available-roles-table"
+                key={`available-roles-table-${filteredAvailableRoles.length}-${assignState?.success}`}
               />
             </CardContent>
           </Card>
@@ -169,11 +208,31 @@ export default function AccessPrivilegesPage({
                   )}
                 </Button>
               </div>
-              {/* <AssignedRolesTable
-                roles={assignedRoles}
-                selectedRoles={selectedAssignedRoles}
-                setSelectedRoles={setSelectedAssignedRoles}
-              /> */}
+              <div className="flex items-center py-4 justify-between">
+                <Input
+                  placeholder="Search role here..."
+                  value={searchAssignedRole}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setSearchAssignedRole(e.target.value)
+                  }
+                  className="max-w-sm h-11"
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedAssignedRoles([])}
+                  className="ml-2"
+                >
+                  Clear Selection
+                </Button>
+              </div>
+              <DataTable
+                columns={columns}
+                data={filteredAssignedRoles}
+                onSelectionChange={setSelectedAssignedRoles}
+                //key="assigned-roles-table"
+                key={`assigned-roles-table-${filteredAssignedRoles.length}-${unAssignState?.success}`}
+              />
             </CardContent>
           </Card>
         </div>

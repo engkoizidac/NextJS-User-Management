@@ -38,7 +38,7 @@ export async function getRoleById(roleId: number) {
   }
 }
 
-export async function getAvailableRoleNotAssigned(userId: string) {
+export async function getNotAssignedRoles(userId: string) {
   try {
     const assignRoles = await prisma.user_role.findMany({
       select: { roleId: true },
@@ -59,6 +59,36 @@ export async function getAvailableRoleNotAssigned(userId: string) {
       where: {
         id: {
           notIn: excludedIds,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error retreiving role data!", error);
+    throw new Error("Failed to retreiving role!");
+  }
+}
+
+export async function getAssignedRoles(userId: string) {
+  try {
+    const assignRoles = await prisma.user_role.findMany({
+      select: { roleId: true },
+      where: {
+        userId: userId,
+      },
+    });
+
+    const includeIds = assignRoles.map((item) => item.roleId);
+
+    return prisma.role.findMany({
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      where: {
+        id: {
+          in: includeIds,
         },
       },
     });

@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import getAuthUser from "./actions/getAuthUser";
 
-const protectedRoutes = ["/dashboard", "/userAccounts", "/userRoles", "/posts"];
+const protectedRoutes = [
+  "/",
+  "/dashboard",
+  "/userAccounts",
+  "/userRoles",
+  "/posts",
+];
 const publicRoutes = ["/login"];
 
 export default async function middleware(req: { nextUrl: URL }) {
