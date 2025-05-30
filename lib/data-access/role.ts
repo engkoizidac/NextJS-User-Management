@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 
 export default async function getRoles() {
   try {
-    return prisma.role.findMany({
+    return await prisma.role.findMany({
       select: {
         id: true,
         name: true,
@@ -21,7 +21,7 @@ export default async function getRoles() {
 
 export async function getRoleById(roleId: number) {
   try {
-    return prisma.role.findUnique({
+    return await prisma.role.findUnique({
       select: {
         id: true,
         name: true,
@@ -49,7 +49,7 @@ export async function getNotAssignedRoles(userId: string) {
 
     const excludedIds = assignRoles.map((item) => item.roleId);
 
-    return prisma.role.findMany({
+    return await prisma.role.findMany({
       select: {
         id: true,
         name: true,

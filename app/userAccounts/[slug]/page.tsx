@@ -1,5 +1,5 @@
 import { getUserById } from "@/lib/data-access/user";
-import AccessPrivilegesPage from "./access-privileges";
+import AccessPrivilegesPage from "./role-settings";
 import { getAssignedRoles, getNotAssignedRoles } from "@/lib/data-access/role";
 
 export default async function Page({
