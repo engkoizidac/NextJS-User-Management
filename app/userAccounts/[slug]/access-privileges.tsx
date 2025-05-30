@@ -28,17 +28,12 @@ type Role = {
   name: string;
 };
 
-interface User {
-  id: string;
-  fullName: string;
-}
-
 export default function AccessPrivilegesPage({
   user,
   availableRoles,
   assignedRoles,
 }: {
-  user: User;
+  user: any;
   availableRoles: Role[];
   assignedRoles: Role[];
 }) {

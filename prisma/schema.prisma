@@ -24,11 +24,12 @@ enum Status {
 }
 
 model role {
-  id        Int         @id @default(autoincrement())
-  name      String      @unique(map: "Role_name_key")
-  createdAt DateTime    @default(now())
-  updatedAt DateTime
-  user_role user_role[]
+  id                    Int                     @id @default(autoincrement())
+  name                  String                  @unique(map: "Role_name_key")
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime
+  user_role             user_role[]
+  role_access_privilege role_access_privilege[]
 }
 
 model menu_main {
@@ -38,12 +39,13 @@ model menu_main {
 }
 
 model menu_child {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique(map: "SubMenu_name_key")
-  description String
-  link        String
-  menuMainId  Int
-  menuMain    menu_main @relation(fields: [menuMainId], references: [id])
+  id               Int                @id @default(autoincrement())
+  name             String             @unique(map: "SubMenu_name_key")
+  description      String
+  link             String
+  menuMainId       Int
+  menuMain         menu_main          @relation(fields: [menuMainId], references: [id])
+  access_privilege access_privilege[]
 }
 
 model user_role {
@@ -52,4 +54,20 @@ model user_role {
   roleId Int
   role   role   @relation(fields: [roleId], references: [id])
   user   user   @relation(fields: [userId], references: [id])
+}
+
+model access_privilege {
+  id                    Int                     @id @default(autoincrement())
+  description           String
+  menuChildId           Int
+  menu_child            menu_child              @relation(fields: [menuChildId], references: [id])
+  role_access_privilege role_access_privilege[]
+}
+
+model role_access_privilege {
+  id                Int              @id @default(autoincrement())
+  roleId            Int
+  role              role             @relation(fields: [roleId], references: [id])
+  accessPrivilegeId Int
+  access_privilege  access_privilege @relation(fields: [accessPrivilegeId], references: [id])
 }
