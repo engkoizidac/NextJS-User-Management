@@ -20,7 +20,7 @@ export default async function getUsers() {
 
 export async function getUserById(userId: string) {
   try {
-    return prisma.user.findUnique({
+    return await prisma.user.findUnique({
       select: {
         id: true,
         fullName: true,

@@ -23,6 +23,11 @@ import Icons from "@/components/ui/icons";
 import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table-with-select";
 
+type User = {
+  id: string;
+  fullName: string;
+};
+
 type Role = {
   id: number;
   name: string;
@@ -33,7 +38,7 @@ export default function AccessPrivilegesPage({
   availableRoles,
   assignedRoles,
 }: {
-  user: any;
+  user: User | null;
   availableRoles: Role[];
   assignedRoles: Role[];
 }) {
@@ -65,8 +70,11 @@ export default function AccessPrivilegesPage({
     );
 
   const assignRoles = () => {
+    if (!user?.id) {
+      throw new Error("User ID is required to assign roles.");
+    }
     const selectedAvailableAssignments = selectedAvailableRoles.map((role) => ({
-      userId: user.id,
+      userId: user?.id,
       roleId: role.id,
     }));
     startTransition(() => {
@@ -85,8 +93,12 @@ export default function AccessPrivilegesPage({
   }, [assignState?.success, unAssignState?.success]);
 
   const unassignRoles = () => {
+    if (!user?.id) {
+      throw new Error("User ID is required to assign roles.");
+    }
+
     const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
-      userId: user.id,
+      userId: user?.id,
       roleId: role.id,
     }));
     startTransition(() => {
