@@ -20,35 +20,50 @@ import {
 import { useRouter } from "next/navigation";
 
 import Icons from "@/components/ui/icons";
-import { columns } from "./columns";
 import { DataTable } from "@/components/ui/data-table-with-select";
+import { columns } from "./access-privileges-columns";
 
 type Role = {
   id: number;
   name: string;
 };
 
-export default function AccessPrivilegesPage({
-  user,
-  availableRoles,
-  assignedRoles,
-}: {
-  user: any;
-  availableRoles: Role[];
-  assignedRoles: Role[];
+interface MenuMain {
+  name: string;
+}
+
+interface MenuChild {
+  name: string;
+  menuMain: MenuMain;
+}
+
+interface AccessPrivilege {
+  id: number;
+  description: string;
+  menu_child: MenuChild;
+}
+
+export default function AccessPrivilegesSettingsPage({
+  role,
+  availablePrivileges,
+}: // assignedPrivileges,
+{
+  role: Role | null;
+  availablePrivileges: AccessPrivilege[];
+  //assignedPrivileges: AccessPrivilege[];
 }) {
   const router = useRouter();
-  const [selectedAvailableRoles, setSelectedAvailableRoles] = useState<Role[]>(
-    []
-  );
-  const [selectedAssignedRoles, setSelectedAssignedRoles] = useState<Role[]>(
-    []
-  );
+  const [selectedAvailablePrivileges, setSelectedAvailablePrivileges] =
+    useState<AccessPrivilege[]>([]);
+  const [selectedAssignedPrivileges, setSelectedAssignedPrivileges] = useState<
+    Role[]
+  >([]);
 
-  const [searchAvailableRole, setSearchAvailableRole] = useState("");
+  const [searchAvailablePrivileges, setSearchAvailablePrivileges] =
+    useState("");
   const [searchAssignedRole, setSearchAssignedRole] = useState("");
 
-  const [assignState, assignRolesActionState, isAssigningPending] =
+  const [assignState, assignPrivilegeActionState, isAssigningPending] =
     useActionState(
       async (state: any, assignments: { userId: string; roleId: number }[]) => {
         return await assignRolesAction(assignments);
@@ -65,44 +80,54 @@ export default function AccessPrivilegesPage({
     );
 
   const assignRoles = () => {
-    const selectedAvailableAssignments = selectedAvailableRoles.map((role) => ({
-      userId: user.id,
-      roleId: role.id,
-    }));
+    if (!role?.id) {
+      throw new Error("User ID is required to assign roles.");
+    }
+    const selectedAvailableAssignments = selectedAvailablePrivileges.map(
+      (role) => ({
+        roleId: role.id,
+      })
+    );
     startTransition(() => {
-      assignRolesActionState(selectedAvailableAssignments);
+      //assignPrivilegeActionState(selectedAvailablePrivileges);
       router.refresh();
     });
   };
 
   useEffect(() => {
     if (assignState?.success || unAssignState?.success) {
-      setSelectedAvailableRoles([]);
-      setSelectedAssignedRoles([]);
-      setSearchAvailableRole("");
-      setSearchAssignedRole("");
+      setSelectedAvailablePrivileges([]);
+      //setSelectedAssignedRoles([]);
+      setSearchAvailablePrivileges("");
+      //setSearchAssignedRole("");
     }
   }, [assignState?.success, unAssignState?.success]);
 
-  const unassignRoles = () => {
-    const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
-      userId: user.id,
-      roleId: role.id,
-    }));
-    startTransition(() => {
-      unAssignRolesActionState(selectedAssignedAssignments);
-      router.refresh();
-    });
-  };
+  // const unassignRoles = () => {
+  //   const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
+  //     userId: user.id,
+  //     roleId: role.id,
+  //   }));
+  //   startTransition(() => {
+  //     unAssignRolesActionState(selectedAssignedAssignments);
+  //     router.refresh();
+  //   });
+  // };
 
   // Filter availableRoles based on search
-  const filteredAvailableRoles = availableRoles.filter((role: any) =>
-    role.name.toLowerCase().includes(searchAvailableRole.toLowerCase())
+  const filteredAvailablePrivileges = availablePrivileges.filter(
+    (privilege: AccessPrivilege) =>
+      privilege.description
+        .toLowerCase()
+        .includes(searchAvailablePrivileges.toLowerCase()) ||
+      privilege.menu_child.menuMain.name
+        .toLowerCase()
+        .includes(searchAvailablePrivileges.toLowerCase())
   );
 
-  const filteredAssignedRoles = assignedRoles.filter((role: any) =>
-    role.name.toLowerCase().includes(searchAssignedRole.toLowerCase())
-  );
+  // const filteredAssignedRoles = assignedRoles.filter((role: any) =>
+  //   role.name.toLowerCase().includes(searchAssignedRole.toLowerCase())
+  // );
 
   return (
     <div className="justify-center items-center ">
@@ -110,7 +135,7 @@ export default function AccessPrivilegesPage({
         <div className="flex  items-center justify-between">
           <div className="flex font-bold text-2xl">
             Role Management:
-            <span className="text-fuchsia-800">&nbsp;{user?.fullName}</span>
+            <span className="text-fuchsia-800">&nbsp;{role?.name}</span>
           </div>
           <div className="flex  justify-end">
             <Link href={`/userAccounts`} className="flex items-center w-full">
@@ -142,7 +167,8 @@ export default function AccessPrivilegesPage({
                 <Button
                   onClick={assignRoles}
                   disabled={
-                    selectedAvailableRoles.length === 0 || isAssigningPending
+                    selectedAvailablePrivileges.length === 0 ||
+                    isAssigningPending
                   }
                   className="w-full sm:w-auto transition-all duration-200 flex items-center gap-2"
                 >
@@ -155,34 +181,35 @@ export default function AccessPrivilegesPage({
                     <PlusCircle className="h-4 w-4" />
                   )}
                   Assign Selected
-                  {selectedAvailableRoles.length > 0 && !isAssigningPending && (
-                    <span className="ml-1 bg-primary-foreground text-primary rounded-full px-2 py-0.5 text-xs font-medium">
-                      {selectedAvailableRoles.length}
-                    </span>
-                  )}
+                  {selectedAvailablePrivileges.length > 0 &&
+                    !isAssigningPending && (
+                      <span className="ml-1 bg-primary-foreground text-primary rounded-full px-2 py-0.5 text-xs font-medium">
+                        {selectedAvailablePrivileges.length}
+                      </span>
+                    )}
                 </Button>
               </div>
               <div className="flex items-center py-4 justify-between">
                 <Input
                   placeholder="Search role here..."
-                  value={searchAvailableRole}
+                  value={searchAvailablePrivileges}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSearchAvailableRole(e.target.value)
+                    setSearchAvailablePrivileges(e.target.value)
                   }
                   className="max-w-sm h-11"
                 />
               </div>
               <DataTable
                 columns={columns}
-                data={filteredAvailableRoles}
-                onSelectionChange={setSelectedAvailableRoles}
+                data={filteredAvailablePrivileges}
+                onSelectionChange={setSelectedAvailablePrivileges}
                 //key="available-roles-table"
-                key={`available-roles-table-${filteredAvailableRoles.length}-${assignState?.success}`}
+                key={`available-roles-table-${filteredAvailablePrivileges.length}-${assignState?.success}`}
               />
             </CardContent>
           </Card>
 
-          <Card className="shadow-md">
+          {/* <Card className="shadow-md">
             <CardHeader className="pb-3">
               <CardTitle>Assigned Roles</CardTitle>
               <CardDescription>
@@ -240,7 +267,7 @@ export default function AccessPrivilegesPage({
                 key={`assigned-roles-table-${filteredAssignedRoles.length}-${unAssignState?.success}`}
               />
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       </div>
     </div>

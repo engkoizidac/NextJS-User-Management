@@ -20,7 +20,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import Icons from "@/components/ui/icons";
-import { columns } from "./columns";
+import { columns } from "./role-assignment-columns";
 import { DataTable } from "@/components/ui/data-table-with-select";
 
 type User = {
@@ -28,12 +28,12 @@ type User = {
   fullName: string;
 };
 
-type Role = {
+interface Role {
   id: number;
   name: string;
-};
+}
 
-export default function AccessPrivilegesPage({
+export default function RoleAssignmentSettingsPage({
   user,
   availableRoles,
   assignedRoles,
@@ -108,11 +108,11 @@ export default function AccessPrivilegesPage({
   };
 
   // Filter availableRoles based on search
-  const filteredAvailableRoles = availableRoles.filter((role: any) =>
+  const filteredAvailableRoles = availableRoles.filter((role: Role) =>
     role.name.toLowerCase().includes(searchAvailableRole.toLowerCase())
   );
 
-  const filteredAssignedRoles = assignedRoles.filter((role: any) =>
+  const filteredAssignedRoles = assignedRoles.filter((role: Role) =>
     role.name.toLowerCase().includes(searchAssignedRole.toLowerCase())
   );
 

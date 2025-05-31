@@ -1,30 +1,23 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-} from "@/components/ui/card";
 import getNotAssignedAccess from "@/lib/data-access/access-privilege";
+
 import { getRoleById } from "@/lib/data-access/role";
-import { PlusCircle, StepBack } from "lucide-react";
+import AccessPrivilegesSettingsPage from "./access-privileges-settings";
 
 export default async function AccessPrivilegesPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const roleId = Number((await params).slug);
-  const Privileges = await getNotAssignedAccess(roleId);
+  const role = await getRoleById(Number((await params).slug));
+  const availablePrivileges = await getNotAssignedAccess(
+    Number((await params).slug)
+  );
 
   return (
-    <div>
-      <ul>
-        {Privileges.map((items) => (
-          <li key={items.id}>{items.menu_child.menuMain.name}</li>
-        ))}
-      </ul>
-    </div>
+    <AccessPrivilegesSettingsPage
+      role={role}
+      availablePrivileges={availablePrivileges}
+      //   assignedRoles={assignedRoles}
+    />
   );
 }
