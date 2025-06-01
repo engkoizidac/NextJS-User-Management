@@ -13,15 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, startTransition } from "react";
 import { useActionState } from "react";
-import {
-  assignRolesAction,
-  unAssignRolesAction,
-} from "@/actions/userRoleController";
+import { unAssignRolesAction } from "@/actions/userRoleController";
 import { useRouter } from "next/navigation";
 
 import Icons from "@/components/ui/icons";
 import { DataTable } from "@/components/ui/data-table-with-select";
 import { columns } from "./access-privileges-columns";
+import { assignPrivilegesAction } from "@/actions/accessPrivilegesController";
 
 type Role = {
   id: number;
@@ -46,27 +44,30 @@ interface AccessPrivilege {
 export default function AccessPrivilegesSettingsPage({
   role,
   availablePrivileges,
-}: // assignedPrivileges,
-{
+  assignedPrivileges,
+}: {
   role: Role | null;
   availablePrivileges: AccessPrivilege[];
-  //assignedPrivileges: AccessPrivilege[];
+  assignedPrivileges: AccessPrivilege[];
 }) {
   const router = useRouter();
   const [selectedAvailablePrivileges, setSelectedAvailablePrivileges] =
     useState<AccessPrivilege[]>([]);
   const [selectedAssignedPrivileges, setSelectedAssignedPrivileges] = useState<
-    Role[]
+    AccessPrivilege[]
   >([]);
 
   const [searchAvailablePrivileges, setSearchAvailablePrivileges] =
     useState("");
-  const [searchAssignedRole, setSearchAssignedRole] = useState("");
+  const [searchAssignedPrivileges, setSearchAssignedRole] = useState("");
 
   const [assignState, assignPrivilegeActionState, isAssigningPending] =
     useActionState(
-      async (state: any, assignments: { userId: string; roleId: number }[]) => {
-        return await assignRolesAction(assignments);
+      async (
+        state: any,
+        assignments: { roleId: number; accessPrivilegeId: number }[]
+      ) => {
+        return await assignPrivilegesAction(assignments);
       },
       null
     );
@@ -79,17 +80,19 @@ export default function AccessPrivilegesSettingsPage({
       null
     );
 
-  const assignRoles = () => {
+  const assignPrivilege = () => {
     if (!role?.id) {
       throw new Error("User ID is required to assign roles.");
     }
     const selectedAvailableAssignments = selectedAvailablePrivileges.map(
-      (role) => ({
+      (AccessPrivilege) => ({
         roleId: role.id,
+        accessPrivilegeId: AccessPrivilege.id,
       })
     );
     startTransition(() => {
-      //assignPrivilegeActionState(selectedAvailablePrivileges);
+      assignPrivilegeActionState(selectedAvailableAssignments);
+      console.log(selectedAvailableAssignments);
       router.refresh();
     });
   };
@@ -103,18 +106,23 @@ export default function AccessPrivilegesSettingsPage({
     }
   }, [assignState?.success, unAssignState?.success]);
 
-  // const unassignRoles = () => {
-  //   const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
-  //     userId: user.id,
-  //     roleId: role.id,
-  //   }));
-  //   startTransition(() => {
-  //     unAssignRolesActionState(selectedAssignedAssignments);
-  //     router.refresh();
-  //   });
-  // };
+  const unassignPrivilege = () => {
+    if (!role?.id) {
+      throw new Error("User ID is required to assign roles.");
+    }
+    const selectedAssignedAssignments = selectedAssignedPrivileges.map(
+      (AccessPrivilege) => ({
+        Id: AccessPrivilege.id,
+        RoleId: role.id,
+      })
+    );
+    startTransition(() => {
+      //unAssignRolesActionState(selectedAssignedAssignments);
+      router.refresh();
+    });
+  };
 
-  // Filter availableRoles based on search
+  // Filter availablePrivileges based on search
   const filteredAvailablePrivileges = availablePrivileges.filter(
     (privilege: AccessPrivilege) =>
       privilege.description
@@ -125,9 +133,16 @@ export default function AccessPrivilegesSettingsPage({
         .includes(searchAvailablePrivileges.toLowerCase())
   );
 
-  // const filteredAssignedRoles = assignedRoles.filter((role: any) =>
-  //   role.name.toLowerCase().includes(searchAssignedRole.toLowerCase())
-  // );
+  // Filter assignedPrivileges based on search
+  const filteredAssignedPrivileges = assignedPrivileges.filter(
+    (privilege: AccessPrivilege) =>
+      privilege.description
+        .toLowerCase()
+        .includes(searchAssignedPrivileges.toLowerCase()) ||
+      privilege.menu_child.menuMain.name
+        .toLowerCase()
+        .includes(searchAssignedPrivileges.toLowerCase())
+  );
 
   return (
     <div className="justify-center items-center ">
@@ -138,11 +153,11 @@ export default function AccessPrivilegesSettingsPage({
             <span className="text-fuchsia-800">&nbsp;{role?.name}</span>
           </div>
           <div className="flex  justify-end">
-            <Link href={`/userAccounts`} className="flex items-center w-full">
+            <Link href={`/userRoles`} className="flex items-center w-full">
               <button className="text-sm  bg-fuchsia-900 text-white px-4 py-2 rounded hover:bg-fuchsia-950">
                 <div className="flex items-center">
                   <ArrowBigLeft className="mr-2 h-5 w-5" />
-                  Back to User Accounts
+                  Back to User Roles
                 </div>
               </button>
             </Link>
@@ -157,15 +172,15 @@ export default function AccessPrivilegesSettingsPage({
         <div className="hidden md:grid md:grid-cols-2 md:gap-6">
           <Card className="shadow-md">
             <CardHeader className="pb-3">
-              <CardTitle>Available Roles</CardTitle>
+              <CardTitle>Available Access</CardTitle>
               <CardDescription>
-                Roles that can be assigned to users
+                Access privileges that can be assigned to this current role
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="mb-4">
                 <Button
-                  onClick={assignRoles}
+                  onClick={assignPrivilege}
                   disabled={
                     selectedAvailablePrivileges.length === 0 ||
                     isAssigningPending
@@ -209,18 +224,18 @@ export default function AccessPrivilegesSettingsPage({
             </CardContent>
           </Card>
 
-          {/* <Card className="shadow-md">
+          <Card className="shadow-md">
             <CardHeader className="pb-3">
-              <CardTitle>Assigned Roles</CardTitle>
+              <CardTitle>Assigned Access</CardTitle>
               <CardDescription>
-                Roles currently assigned to users
+                Access privileges currently assigned to this role
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="mb-4">
                 <Button
-                  onClick={unassignRoles}
-                  disabled={selectedAssignedRoles.length === 0}
+                  onClick={unassignPrivilege}
+                  disabled={selectedAssignedPrivileges.length === 0}
                   variant="outline"
                   className="w-full sm:w-auto transition-all duration-200 flex items-center gap-2"
                 >
@@ -233,10 +248,10 @@ export default function AccessPrivilegesSettingsPage({
                     <MinusCircle className="h-4 w-4" />
                   )}
                   Un-Assign Selected
-                  {selectedAssignedRoles.length > 0 &&
+                  {selectedAssignedPrivileges.length > 0 &&
                     !isUnAssigningPending && (
                       <span className="ml-1 bg-primary-foreground text-primary rounded-full px-2 py-0.5 text-xs font-medium">
-                        {selectedAssignedRoles.length}
+                        {selectedAssignedPrivileges.length}
                       </span>
                     )}
                 </Button>
@@ -244,30 +259,22 @@ export default function AccessPrivilegesSettingsPage({
               <div className="flex items-center py-4 justify-between">
                 <Input
                   placeholder="Search role here..."
-                  value={searchAssignedRole}
+                  value={searchAssignedPrivileges}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setSearchAssignedRole(e.target.value)
                   }
                   className="max-w-sm h-11"
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedAssignedRoles([])}
-                  className="ml-2"
-                >
-                  Clear Selection
-                </Button>
               </div>
               <DataTable
                 columns={columns}
-                data={filteredAssignedRoles}
-                onSelectionChange={setSelectedAssignedRoles}
+                data={filteredAssignedPrivileges}
+                onSelectionChange={setSelectedAssignedPrivileges}
                 //key="assigned-roles-table"
-                key={`assigned-roles-table-${filteredAssignedRoles.length}-${unAssignState?.success}`}
+                key={`assigned-roles-table-${filteredAssignedPrivileges.length}-${unAssignState?.success}`}
               />
             </CardContent>
-          </Card> */}
+          </Card>
         </div>
       </div>
     </div>

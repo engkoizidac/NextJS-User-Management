@@ -1,0 +1,16 @@
+import { prisma } from "../prisma";
+
+export default async function assignAccessPrivileges(
+  accessPrivileges: { accessPrivilegeId: number; roleId: number }[]
+) {
+  try {
+    await prisma.role_access_privilege.createMany({
+      data: accessPrivileges,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error creating role!", error);
+    throw new Error("Failed to create new role!");
+  }
+}

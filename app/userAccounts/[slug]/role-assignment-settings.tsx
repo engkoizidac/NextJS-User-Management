@@ -146,7 +146,7 @@ export default function RoleAssignmentSettingsPage({
             <CardHeader className="pb-3">
               <CardTitle>Available Roles</CardTitle>
               <CardDescription>
-                Roles that can be assigned to users
+                Roles that can be assign to this current user
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -198,7 +198,7 @@ export default function RoleAssignmentSettingsPage({
             <CardHeader className="pb-3">
               <CardTitle>Assigned Roles</CardTitle>
               <CardDescription>
-                Roles currently assigned to users
+                Roles currently assigned to user
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -235,14 +235,6 @@ export default function RoleAssignmentSettingsPage({
                   }
                   className="max-w-sm h-11"
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setSelectedAssignedRoles([])}
-                  className="ml-2"
-                >
-                  Clear Selection
-                </Button>
               </div>
               <DataTable
                 columns={columns}
