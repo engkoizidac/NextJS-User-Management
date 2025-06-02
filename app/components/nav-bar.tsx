@@ -30,19 +30,6 @@ const adminLinks = [
   },
 ];
 
-const adminLinks2 = [
-  {
-    title: "User Accounts",
-    href: "/userAccounts",
-    description: "Add, edit, and delete user accounts and manage their roles.",
-  },
-  {
-    title: "User Role Management",
-    href: "/userRoles",
-    description: "Manage user assigned roles and their permissions.",
-  },
-];
-
 export async function NavBar() {
   const authUser = await getAuthUser();
   return (

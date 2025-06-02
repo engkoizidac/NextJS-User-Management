@@ -19,7 +19,10 @@ import { useRouter } from "next/navigation";
 import Icons from "@/components/ui/icons";
 import { DataTable } from "@/components/ui/data-table-with-select";
 import { columns } from "./access-privileges-columns";
-import { assignPrivilegesAction } from "@/actions/accessPrivilegesController";
+import {
+  assignPrivilegesAction,
+  unAssignPrivilegesAction,
+} from "@/actions/accessPrivilegesController";
 
 type Role = {
   id: number;
@@ -59,8 +62,9 @@ export default function AccessPrivilegesSettingsPage({
 
   const [searchAvailablePrivileges, setSearchAvailablePrivileges] =
     useState("");
-  const [searchAssignedPrivileges, setSearchAssignedRole] = useState("");
+  const [searchAssignedPrivileges, setSearchAssignedPrivileges] = useState("");
 
+  //Assign Access Privileges
   const [assignState, assignPrivilegeActionState, isAssigningPending] =
     useActionState(
       async (
@@ -72,15 +76,18 @@ export default function AccessPrivilegesSettingsPage({
       null
     );
 
-  const [unAssignState, unAssignRolesActionState, isUnAssigningPending] =
+  const [unAssignState, unAssignPrivilegeActionState, isUnAssigningPending] =
     useActionState(
-      async (state: any, assignments: { userId: string; roleId: number }[]) => {
-        return await unAssignRolesAction(assignments);
+      async (
+        state: any,
+        assignments: { roleId: number; accessPrivilegeId: number }[]
+      ) => {
+        return await unAssignPrivilegesAction(assignments);
       },
       null
     );
 
-  const assignPrivilege = () => {
+  const assignPrivileges = () => {
     if (!role?.id) {
       throw new Error("User ID is required to assign roles.");
     }
@@ -100,24 +107,24 @@ export default function AccessPrivilegesSettingsPage({
   useEffect(() => {
     if (assignState?.success || unAssignState?.success) {
       setSelectedAvailablePrivileges([]);
-      //setSelectedAssignedRoles([]);
+      setSelectedAssignedPrivileges([]);
       setSearchAvailablePrivileges("");
-      //setSearchAssignedRole("");
+      setSearchAssignedPrivileges("");
     }
   }, [assignState?.success, unAssignState?.success]);
 
-  const unassignPrivilege = () => {
+  const unassignPrivileges = () => {
     if (!role?.id) {
       throw new Error("User ID is required to assign roles.");
     }
     const selectedAssignedAssignments = selectedAssignedPrivileges.map(
       (AccessPrivilege) => ({
-        Id: AccessPrivilege.id,
-        RoleId: role.id,
+        roleId: role.id,
+        accessPrivilegeId: AccessPrivilege.id,
       })
     );
     startTransition(() => {
-      //unAssignRolesActionState(selectedAssignedAssignments);
+      unAssignPrivilegeActionState(selectedAssignedAssignments);
       router.refresh();
     });
   };
@@ -180,7 +187,7 @@ export default function AccessPrivilegesSettingsPage({
             <CardContent>
               <div className="mb-4">
                 <Button
-                  onClick={assignPrivilege}
+                  onClick={assignPrivileges}
                   disabled={
                     selectedAvailablePrivileges.length === 0 ||
                     isAssigningPending
@@ -234,7 +241,7 @@ export default function AccessPrivilegesSettingsPage({
             <CardContent>
               <div className="mb-4">
                 <Button
-                  onClick={unassignPrivilege}
+                  onClick={unassignPrivileges}
                   disabled={selectedAssignedPrivileges.length === 0}
                   variant="outline"
                   className="w-full sm:w-auto transition-all duration-200 flex items-center gap-2"
@@ -261,7 +268,7 @@ export default function AccessPrivilegesSettingsPage({
                   placeholder="Search role here..."
                   value={searchAssignedPrivileges}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setSearchAssignedRole(e.target.value)
+                    setSearchAssignedPrivileges(e.target.value)
                   }
                   className="max-w-sm h-11"
                 />

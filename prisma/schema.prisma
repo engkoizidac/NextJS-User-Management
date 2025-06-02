@@ -52,8 +52,8 @@ model user_role {
   id     Int    @id @default(autoincrement())
   userId String
   roleId Int
-  role   role   @relation(fields: [roleId], references: [id])
-  user   user   @relation(fields: [userId], references: [id])
+  role   role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model access_privilege {
@@ -67,7 +67,7 @@ model access_privilege {
 model role_access_privilege {
   id                Int              @id @default(autoincrement())
   roleId            Int
-  role              role             @relation(fields: [roleId], references: [id])
+  role              role             @relation(fields: [roleId], references: [id], onDelete: Cascade)
   accessPrivilegeId Int
   access_privilege  access_privilege @relation(fields: [accessPrivilegeId], references: [id])
 }
