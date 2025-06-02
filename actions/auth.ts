@@ -48,7 +48,7 @@ export async function login(state: any, formData: FormData) {
   //console.log(existingUser);
 
   // Redirect
-  redirect("/dashboard");
+  redirect("/");
 }
 
 export async function logout() {

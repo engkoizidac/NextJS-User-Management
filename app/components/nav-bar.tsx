@@ -16,22 +16,35 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { getUserMenus } from "@/lib/data-access/menu";
+import { any } from "zod";
 
-const adminLinks = [
-  {
-    title: "User Accounts",
-    href: "/userAccounts",
-    description: "Add, edit, and delete user accounts and manage their roles.",
-  },
-  {
-    title: "User Role Management",
-    href: "/userRoles",
-    description: "Manage user assigned roles and their permissions.",
-  },
-];
+interface menuChild {
+  id: number;
+  name: string;
+  link: string;
+  description: string;
+}
+
+interface menuMain {
+  id: number;
+  name: string;
+  children: menuChild[];
+}
 
 export async function NavBar() {
   const authUser = await getAuthUser();
+  const userIdAsString = authUser?.userId?.toString();
+
+  let menuTree: menuMain[] = [];
+
+  if (authUser) {
+    if (!userIdAsString) {
+      throw new Error("User ID is missing");
+    }
+    menuTree = await getUserMenus(userIdAsString);
+  }
+
   return (
     <nav className="py-5 flex items-center justify-between sm:px-2 lg:px-4">
       <div className="flex items-center gap-10 ">
@@ -46,39 +59,36 @@ export async function NavBar() {
         <div className="hidden md:flex md:flex-1 pl-10">
           <NavigationMenu>
             <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Home
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/dashboard"
-                  className={navigationMenuTriggerStyle()}
-                >
-                  Dashboard
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>Admin</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {adminLinks.map((subMenus) => (
-                      <ListItem
-                        key={subMenus.title}
-                        title={subMenus.title}
-                        href={subMenus.href}
-                      >
-                        {subMenus.description}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
+              {menuTree.map((mainMenu) => (
+                <NavigationMenuItem key={mainMenu.id}>
+                  {mainMenu.children.length > 0 ? (
+                    <>
+                      <NavigationMenuTrigger>
+                        {mainMenu.name}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                          {mainMenu.children.map((child) => (
+                            <ListItem
+                              key={child.id}
+                              title={child.name}
+                              href={child.link}
+                            >
+                              {child.description}
+                            </ListItem>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      {mainMenu.name}
+                    </NavigationMenuLink>
+                  )}
+                </NavigationMenuItem>
+              ))}
             </NavigationMenuList>
           </NavigationMenu>
         </div>
