@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
         />
         <div className="flex items-center justify-end">
           <button
-            className="text-sm  bg-fuchsia-900 text-white px-4 py-2 rounded hover:bg-fuchsia-950"
+            className="text-sm  bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
             onClick={() => setOpen(true)}
           >
             <div className="flex items-center">

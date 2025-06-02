@@ -12,7 +12,7 @@ export default async function UserAccounts() {
     <div>
       <div className="container mx-auto py-8 ">
         <div className="font-bold text-2xl">User Accounts</div>
-        <div className="text-fuchsia-950">
+        <div className="text-blue-400">
           Add, edit, and delete user accounts and manage their roles.
         </div>
       </div>

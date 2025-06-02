@@ -1,5 +1,4 @@
 import * as React from "react";
-import { logout } from "@/actions/auth";
 import getAuthUser from "@/actions/getAuthUser";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -15,6 +14,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { getUserMenus } from "@/lib/data-access/menu";
+import UserNav from "./user-nav";
+import { ThemeToggle } from "./theme-toggle";
+import { getUserById } from "@/lib/data-access/user";
 
 interface MenuChild {
   id: number;
@@ -29,9 +31,16 @@ interface MenuMain {
   children: MenuChild[];
 }
 
+interface User {
+  id: string;
+  fullName: string;
+}
+
 export async function NavBar() {
   const authUser = await getAuthUser();
   const userIdAsString = authUser?.userId?.toString();
+
+  let user = null;
 
   let menuTree: MenuMain[] = [];
 
@@ -40,16 +49,15 @@ export async function NavBar() {
       throw new Error("User ID is missing");
     }
     menuTree = await getUserMenus(userIdAsString);
+    user = await getUserById(userIdAsString);
   }
-
-  //console.log(menuTree);
 
   return (
     <nav className="py-5 flex items-center justify-between sm:px-2 lg:px-4">
       <div className="flex items-center gap-10 ">
         <Link href="/">
           <h1 className="text-3xl font-semibold justify-between">
-            User<span className="text-fuchsia-800">Auth</span>
+            User<span className="text-blue-500">Auth</span>
           </h1>
         </Link>
       </div>
@@ -94,12 +102,13 @@ export async function NavBar() {
         </div>
       ) : null}
 
-      <div className="flex items-center gap-4">
-        <div className="flex gap-4">
+      <div className="flex items-center gap-2">
+        <div className="flex">
           {authUser ? (
-            <form action={logout}>
-              <Button variant="secondary">Logout</Button>
-            </form>
+            <div className="flex item-center gap-2">
+              <ThemeToggle />
+              <UserNav user={user} />
+            </div>
           ) : (
             <Link href="/login">
               <Button>Login</Button>

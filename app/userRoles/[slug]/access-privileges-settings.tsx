@@ -157,11 +157,11 @@ export default function AccessPrivilegesSettingsPage({
         <div className="flex  items-center justify-between">
           <div className="flex font-bold text-2xl">
             Role Management:
-            <span className="text-fuchsia-800">&nbsp;{role?.name}</span>
+            <span className="text-blue-500">&nbsp;{role?.name}</span>
           </div>
           <div className="flex  justify-end">
             <Link href={`/userRoles`} className="flex items-center w-full">
-              <button className="text-sm  bg-fuchsia-900 text-white px-4 py-2 rounded hover:bg-fuchsia-950">
+              <button className="text-sm  bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 <div className="flex items-center">
                   <ArrowBigLeft className="mr-2 h-5 w-5" />
                   Back to User Roles
@@ -170,7 +170,7 @@ export default function AccessPrivilegesSettingsPage({
             </Link>
           </div>
         </div>
-        <div className="text-fuchsia-950">
+        <div className="text-blue-400">
           Assign and manage user roles in your organization
         </div>
       </div>

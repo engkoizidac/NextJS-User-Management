@@ -1,7 +1,7 @@
 export default async function Home() {
   return (
     <div>
-      <div className="container mx-auto py-8 ">
+      <div className="container mx-auto py-8  ">
         <div className="font-bold text-2xl">Welcome</div>
         <div className="text-fuchsia-950">
           A nextjs program boiler plate with complete user management system
