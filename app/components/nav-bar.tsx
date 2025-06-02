@@ -4,8 +4,6 @@ import getAuthUser from "@/actions/getAuthUser";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-import { Menu } from "lucide-react";
-
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -17,26 +15,25 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import { getUserMenus } from "@/lib/data-access/menu";
-import { any } from "zod";
 
-interface menuChild {
+interface MenuChild {
   id: number;
   name: string;
   link: string;
   description: string;
 }
 
-interface menuMain {
+interface MenuMain {
   id: number;
   name: string;
-  children: menuChild[];
+  children: MenuChild[];
 }
 
 export async function NavBar() {
   const authUser = await getAuthUser();
   const userIdAsString = authUser?.userId?.toString();
 
-  let menuTree: menuMain[] = [];
+  let menuTree: MenuMain[] = [];
 
   if (authUser) {
     if (!userIdAsString) {
@@ -44,6 +41,8 @@ export async function NavBar() {
     }
     menuTree = await getUserMenus(userIdAsString);
   }
+
+  //console.log(menuTree);
 
   return (
     <nav className="py-5 flex items-center justify-between sm:px-2 lg:px-4">
@@ -82,6 +81,7 @@ export async function NavBar() {
                     </>
                   ) : (
                     <NavigationMenuLink
+                      key={mainMenu.id}
                       className={navigationMenuTriggerStyle()}
                     >
                       {mainMenu.name}

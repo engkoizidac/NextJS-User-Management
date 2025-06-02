@@ -48,14 +48,29 @@ export async function getUserMenus(userId: string) {
         });
       }
 
-      menus.get(menuMain.id)?.children.push({
-        id: menuChild.id,
-        name: menuChild.name,
-        link: menuChild.link,
-        description: menuChild.description,
-      });
+      const currentMenu = menus.get(menuMain.id);
+
+      if (
+        currentMenu &&
+        !currentMenu.children.some((child) => child.id === menuChild.id)
+      ) {
+        currentMenu.children.push({
+          id: menuChild.id,
+          name: menuChild.name,
+          link: menuChild.link,
+          description: menuChild.description,
+        });
+      }
     }
   }
 
-  return Array.from(menus.values());
+  //Sort menu by id
+  const sortedMenus = Array.from(menus.values())
+    .map((main) => ({
+      ...main,
+      children: main.children.sort((a, b) => a.id - b.id), // sort child menus
+    }))
+    .sort((a, b) => a.id - b.id); // ✅ sort main menus by id
+
+  return sortedMenus;
 }
