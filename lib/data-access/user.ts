@@ -25,6 +25,7 @@ export async function getUserById(userId: string) {
         id: true,
         fullName: true,
         username: true,
+        password: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -116,5 +117,22 @@ export async function blankUserPassword(userId: string, password: string) {
   } catch (error) {
     console.error("Error on clearing user password:", error);
     throw new Error("Failed on clearing user password. Please try again.");
+  }
+}
+
+export async function updateUserPassword(userId: string, newPassword: string) {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        password: newPassword,
+      },
+    });
+    return { success: true };
+  } catch (error) {
+    console.error("Error on updating user password:", error);
+    throw new Error("Failed on updating user password. Please try again.");
   }
 }

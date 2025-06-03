@@ -4,9 +4,14 @@ import getUsers, {
   blankUserPassword,
   postUser,
   patchUser,
+  getUserById,
+  updateUserPassword,
 } from "@/lib/data-access/user";
 import { removeUser } from "@/lib/data-access/user";
-import { UserAccountFormSchema } from "@/lib/schema/userValidation";
+import {
+  UserAccountFormSchema,
+  UserChangePasswordSchema,
+} from "@/lib/schema/userValidation";
 import bcrypt from "bcrypt";
 
 export async function addUser(prevState: any, formData: FormData) {
@@ -119,6 +124,59 @@ export async function clearUserPassword(userId: string) {
   } catch (error) {
     return {
       error: "Failed to reset user password!",
+    };
+  }
+}
+
+export async function changeUserPassword(
+  prevState: any,
+  formData: FormData,
+  userId: string
+) {
+  const validatedFields = UserChangePasswordSchema.safeParse({
+    currentPassword: formData.get("currentPassword"),
+    newPassword: formData.get("newPassword"),
+    confirmedPassword: formData.get("confirmedPassword"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { currentPassword, newPassword } = validatedFields.data;
+
+  try {
+    const currentUser = await getUserById(userId);
+
+    console.log("entered password", currentPassword);
+    console.log("current password", currentUser?.password);
+
+    if (!currentUser) {
+      return { success: false, message: "User not found" };
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      currentUser.password
+    );
+
+    if (!isPasswordValid) {
+      return { success: false, message: "Invalid password" };
+    }
+
+    const hashedPassword = await bcrypt.hash(<string>newPassword, 10);
+
+    const changeUserPassword = await updateUserPassword(userId, hashedPassword);
+    if (!changeUserPassword) return { errors: { username: "Server error!" } };
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    return {
+      error: "Failed to update user password!",
     };
   }
 }

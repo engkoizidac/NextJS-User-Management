@@ -6,7 +6,7 @@ const protectedRoutes = [
   "/dashboard",
   "/userAccounts",
   "/userRoles",
-  "/posts",
+  "/userSettings",
 ];
 const publicRoutes = ["/login"];
 
