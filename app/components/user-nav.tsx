@@ -13,6 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogOut, Settings } from "lucide-react";
 import { logout } from "@/actions/auth";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface User {
   id: string;
@@ -20,6 +22,7 @@ interface User {
 }
 
 export default function UserNav({ user: User }: { user: User | null }) {
+  const router = useRouter();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,13 +61,23 @@ export default function UserNav({ user: User }: { user: User | null }) {
             <CreditCard className="mr-2 h-4 w-4" />
             <span>Billing</span>
           </DropdownMenuItem> */}
-          <DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              if (User?.id) {
+                router.push(`/userSettings/${User.id}`);
+              }
+            }}
+          >
             <Settings className="mr-2 h-4 w-4" />
             <span>Settings</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => logout()}>
+        <DropdownMenuItem
+          onClick={async () => {
+            await logout();
+          }}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
