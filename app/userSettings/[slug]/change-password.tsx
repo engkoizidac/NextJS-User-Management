@@ -80,7 +80,7 @@ export default function ChangePasswordForm({ userId }: Props) {
                     type={showCurrent ? "text" : "password"}
                     autoComplete="current-password"
                     {...field}
-                    className="h-10"
+                    className="pr-10 relative"
                   />
                   <button
                     type="button"
