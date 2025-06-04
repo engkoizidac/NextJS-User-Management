@@ -16,17 +16,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className={`antialiased`}>
-        <Toaster
-          position="bottom-center"
-          reverseOrder={false}
-          toastOptions={{
-            duration: 3000, // Toasts will auto-close after 2 seconds
-          }}
-        />
+      <body className={`antialiased min-h-screen bg-background`}>
+        <Toaster /*...*/ />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NavBar />
-          {children}
+          <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>
