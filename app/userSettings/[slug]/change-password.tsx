@@ -28,7 +28,12 @@ interface User {
   fullName: string;
 }
 
-export default function ChangePasswordForm({ user }: { user: User | null }) {
+interface Props {
+  userId: string;
+}
+
+export default function ChangePasswordForm({ userId }: Props) {
+  // export default function ChangePasswordForm({ user }: { user: User | null }) {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -41,13 +46,9 @@ export default function ChangePasswordForm({ user }: { user: User | null }) {
     },
   });
 
-  if (!user?.id) {
-    throw new Error("User ID is required to assign roles.");
-  }
-
   const [state, action, isPending] = useActionState(
     async (prevState: any, formData: FormData) =>
-      changeUserPassword(prevState, formData, user.id),
+      changeUserPassword(prevState, formData, userId),
     undefined
   );
 
