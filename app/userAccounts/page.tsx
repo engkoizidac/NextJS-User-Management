@@ -1,9 +1,6 @@
 import getUsers from "@/lib/data-access/user";
 import UserAccounts from "./user-accounts";
 
-// Add revalidation
-export const revalidate = 0; // This ensures the page is always fresh
-
 export default async function UserAccountsPage() {
   const Users = await getUsers();
   return (

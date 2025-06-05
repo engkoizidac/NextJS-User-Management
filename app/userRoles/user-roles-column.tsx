@@ -20,9 +20,9 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import { format } from "date-fns";
-import { EditRoleDialog } from "../dialogs/edit-role-dialog";
+import { EditRoleDialog } from "./dialogs/edit-role-dialog";
 import { deleteRole } from "@/actions/roleController";
-import YesNoDialogDeleteRole from "../dialogs/confirm-delete-role-dialog";
+import YesNoDialogDeleteRole from "./dialogs/confirm-delete-role-dialog";
 import Link from "next/link";
 
 function ActionsCell({ row }: { row: any }) {
