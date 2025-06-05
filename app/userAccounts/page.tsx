@@ -1,13 +1,11 @@
 import getUsers from "@/lib/data-access/user";
-import { columns } from "./user-accounts-data-table/user-data-columns";
-import { DataTable } from "./user-accounts-data-table/user-data-table";
+import UserAccounts from "./user-accounts";
 
 // Add revalidation
 export const revalidate = 0; // This ensures the page is always fresh
 
-export default async function UserAccounts() {
-  const userCollection = await getUsers();
-
+export default async function UserAccountsPage() {
+  const Users = await getUsers();
   return (
     <div>
       <div className="container mx-auto py-8 ">
@@ -16,13 +14,7 @@ export default async function UserAccounts() {
           Add, edit, and delete user accounts and manage their roles.
         </div>
       </div>
-      <div className="container mx-auto py-2">
-        <DataTable
-          columns={columns}
-          data={userCollection}
-          key={Date.now()} // Force re-render on data changes
-        />
-      </div>
+      <UserAccounts Users={Users} />
     </div>
   );
 }
