@@ -64,7 +64,7 @@ export default function ChangePasswordForm({ userId }: Props) {
       <form
         id="change-password-form"
         action={action}
-        className="space-y-4 max-w-sm pt-4"
+        className="space-y-4 w-full max-w-sm pt-4 mx-auto"
       >
         {/* Current Password */}
         <FormField

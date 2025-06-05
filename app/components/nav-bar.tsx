@@ -44,7 +44,7 @@ interface User {
   fullName: string;
 }
 
-export async function NavBar() {
+export async function NavBarComponent() {
   const authUser = await getAuthUser();
   const userIdAsString = authUser?.userId?.toString();
 
