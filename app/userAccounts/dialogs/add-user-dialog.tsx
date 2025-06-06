@@ -62,13 +62,13 @@ export function AddUserDialog({
 
   useEffect(() => {
     if (state?.success) {
-      onOpenChange(false);
-      toast.success("User added successfully");
-      form.reset();
-
       if (onSubmitSuccess) {
         onSubmitSuccess(); // <-- trigger parent refresh
       }
+
+      onOpenChange(false);
+      toast.success("User added successfully");
+      form.reset();
     }
   }, [state?.success, onOpenChange, form, onSubmitSuccess]);
 

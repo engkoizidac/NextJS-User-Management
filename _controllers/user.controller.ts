@@ -180,3 +180,13 @@ export async function changeUserPassword(
     };
   }
 }
+
+export async function getAllUsers() {
+  try {
+    const users = await getUsers();
+    if (!users) throw new Error("Server error!");
+    return users;
+  } catch (error) {
+    throw new Error("Failed to retrieve all user data");
+  }
+}

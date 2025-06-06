@@ -51,7 +51,7 @@ export default function UserRoles({ Roles }: { Roles: Roles[] }) {
         </ToolbarWithSearchAndAction>
         <div>
           {/* Render the data table*/}
-          <DataTable columns={columns} data={filteredUsers} />
+          <DataTable columns={columns} data={filteredUsers} key={Date.now()} />
         </div>
       </div>
     </div>

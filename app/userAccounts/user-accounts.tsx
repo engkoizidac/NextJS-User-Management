@@ -8,13 +8,9 @@ import { PlusCircle } from "lucide-react";
 import { AddUserDialog } from "./dialogs/add-user-dialog";
 import { columns } from "./user-accounts-columns";
 import { ToolbarWithSearchAndAction } from "../components/toolbar-with-search";
+import { User } from "@/_types/user";
 
-interface Users {
-  id: string;
-  fullName: string;
-}
-
-export default function UserAccounts({ Users }: { Users: Users[] }) {
+export default function UserAccounts({ Users }: { Users: User[] }) {
   const [searchUser, setSearchUser] = useState("");
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -25,7 +21,7 @@ export default function UserAccounts({ Users }: { Users: Users[] }) {
   }, [router]);
 
   // Filter availableRoles based on search
-  const filteredUsers = Users.filter((user: Users) =>
+  const filteredUsers = Users.filter((user: User) =>
     user.fullName.toLowerCase().includes(searchUser.toLowerCase())
   );
 
@@ -49,7 +45,7 @@ export default function UserAccounts({ Users }: { Users: Users[] }) {
         </ToolbarWithSearchAndAction>
         <div>
           {/* Render the data table*/}
-          <DataTable columns={columns} data={filteredUsers} />
+          <DataTable columns={columns} data={filteredUsers} key={Date.now()} />
         </div>
       </div>
     </div>
