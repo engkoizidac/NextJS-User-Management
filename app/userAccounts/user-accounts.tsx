@@ -10,7 +10,7 @@ import { columns } from "./user-accounts-columns";
 import { ToolbarWithSearchAndAction } from "../components/toolbar-with-search";
 import { User } from "@/_types/user";
 
-export default function UserAccounts({ Users }: { Users: User[] }) {
+export default function UserAccounts({ users }: { users: User[] }) {
   const [searchUser, setSearchUser] = useState("");
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function UserAccounts({ Users }: { Users: User[] }) {
   }, [router]);
 
   // Filter availableRoles based on search
-  const filteredUsers = Users.filter((user: User) =>
+  const filteredUsers = users.filter((user: User) =>
     user.fullName.toLowerCase().includes(searchUser.toLowerCase())
   );
 

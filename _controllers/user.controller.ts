@@ -31,7 +31,7 @@ export async function addUser(prevState: any, formData: FormData) {
   const { fullName, username, password, status } = validatedFields.data;
 
   try {
-    const userCollection = await getUsers();
+    const userCollection = await getAll();
     if (!userCollection) return { errors: { username: "Server error!" } };
 
     const existingUser = await userCollection.find(
@@ -148,7 +148,7 @@ export async function changeUserPassword(
   const { currentPassword, newPassword } = validatedFields.data;
 
   try {
-    const currentUser = await getUserById(userId);
+    const currentUser = await getById(userId);
 
     console.log("entered password", currentPassword);
     console.log("current password", currentUser?.password);
@@ -181,9 +181,19 @@ export async function changeUserPassword(
   }
 }
 
-export async function getAllUsers() {
+export async function getAll() {
   try {
     const users = await getUsers();
+    if (!users) throw new Error("Server error!");
+    return users;
+  } catch (error) {
+    throw new Error("Failed to retrieve all user data");
+  }
+}
+
+export async function getById(userId: string) {
+  try {
+    const users = await getUserById(userId);
     if (!users) throw new Error("Server error!");
     return users;
   } catch (error) {

@@ -23,23 +23,15 @@ import Icons from "@/components/ui/icons";
 import { columns } from "./role-assignment-columns";
 import { DataTable } from "@/components/ui/data-table-with-select";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-type User = {
-  id: string;
-  fullName: string;
-};
-
-interface Role {
-  id: number;
-  name: string;
-}
+import { User } from "@/_types/user";
+import { Role } from "@/_types/role";
 
 export default function RoleAssignmentSettingsPage({
-  user,
+  users,
   availableRoles,
   assignedRoles,
 }: {
-  user: User | null;
+  users: User;
   availableRoles: Role[];
   assignedRoles: Role[];
 }) {
@@ -73,11 +65,8 @@ export default function RoleAssignmentSettingsPage({
   const [activeTab, setActiveTab] = useState<string>("available");
 
   const assignRoles = () => {
-    if (!user?.id) {
-      throw new Error("User ID is required to assign roles.");
-    }
     const selectedAvailableAssignments = selectedAvailableRoles.map((role) => ({
-      userId: user?.id,
+      userId: users.id,
       roleId: role.id,
     }));
     startTransition(() => {
@@ -96,12 +85,8 @@ export default function RoleAssignmentSettingsPage({
   }, [assignState?.success, unAssignState?.success]);
 
   const unassignRoles = () => {
-    if (!user?.id) {
-      throw new Error("User ID is required to assign roles.");
-    }
-
     const selectedAssignedAssignments = selectedAssignedRoles.map((role) => ({
-      userId: user?.id,
+      userId: users.id,
       roleId: role.id,
     }));
     startTransition(() => {
@@ -125,7 +110,7 @@ export default function RoleAssignmentSettingsPage({
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex font-bold text-2xl">
             Role Management:
-            <span className="text-blue-500">&nbsp;{user?.fullName}</span>
+            <span className="text-blue-500">&nbsp;{users.fullName}</span>
           </div>
           <div className="flex justify-end w-full sm:w-auto">
             <Link href={`/userAccounts`} className="flex items-center w-full">
