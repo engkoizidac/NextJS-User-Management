@@ -1,5 +1,5 @@
-import { getUserById } from "@/lib/data-access/user";
-import { getAssignedRoles, getNotAssignedRoles } from "@/lib/data-access/role";
+import { getUserById } from "@/_models/user.model";
+import { getAssignedRoles, getNotAssignedRoles } from "@/_models/role.model";
 import RoleAssignmentSettingsPage from "./role-assignment-settings";
 
 export default async function Page({

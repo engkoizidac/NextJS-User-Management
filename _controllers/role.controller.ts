@@ -4,8 +4,8 @@ import getRoles, {
   patchRole,
   postRole,
   removeRole,
-} from "@/lib/data-access/role";
-import { RoleFormSchema } from "@/lib/schema/roleValidation";
+} from "@/_models/role.model";
+import { RoleFormSchema } from "@/_validations/roleValidation";
 import { errors } from "jose";
 
 export async function createRole(prevState: any, formData: FormData) {

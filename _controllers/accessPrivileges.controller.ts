@@ -2,7 +2,7 @@
 
 import assignAccessPrivileges, {
   unAssignAccessPrivileges,
-} from "@/lib/data-access/role-access-privilege";
+} from "@/_models/roleAccessPrivilege.model";
 
 export async function assignPrivilegesAction(
   accessPrivileges: { roleId: number; accessPrivilegeId: number }[]

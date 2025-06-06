@@ -1,5 +1,5 @@
 import { decrypt } from "@/app/lib/session";
-import { getUserMenus } from "@/lib/data-access/menu";
+import { getUserMenus } from "@/_models/menu.model";
 import { cookies } from "next/headers";
 
 export default async function getAuthUser() {

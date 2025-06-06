@@ -1,4 +1,4 @@
-import getRoles from "@/lib/data-access/role";
+import getRoles from "@/_models/role.model";
 import UserRoles from "./user-roles";
 import FormTitleComponent from "../components/form-title";
 

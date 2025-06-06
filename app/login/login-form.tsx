@@ -2,7 +2,7 @@
 
 import type React from "react";
 import { useActionState, useState } from "react";
-import { login } from "@/actions/auth";
+import { login } from "@/_controllers/auth.controller";
 import { Button } from "@/components/ui/button";
 import {
   Card,

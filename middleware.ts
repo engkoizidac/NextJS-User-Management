@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import getAuthUser from "./actions/getAuthUser";
+import getAuthUser from "./_controllers/getAuthUser.controller";
 
 const protectedRoutes = [
   "/",

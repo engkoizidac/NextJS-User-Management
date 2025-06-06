@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
-import { createRole } from "@/actions/roleController";
+import { createRole } from "@/_controllers/role.controller";
 
 type AddRoleDialogProps = {
   open: boolean;

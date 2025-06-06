@@ -2,12 +2,12 @@
 
 import bcrypt from "bcrypt";
 
-import { LoginFormSchema } from "@/lib/schema/userValidation";
+import { LoginFormSchema } from "@/_validations/userValidation";
 import { redirect } from "next/navigation";
 import { createSession } from "@/app/lib/session";
 
 import { cookies } from "next/headers";
-import getUsers from "@/lib/data-access/user";
+import getUsers from "@/_models/user.model";
 
 export async function login(state: any, formData: FormData) {
   // Validate form fields

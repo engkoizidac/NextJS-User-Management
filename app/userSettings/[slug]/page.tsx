@@ -1,4 +1,4 @@
-import { getUserById } from "@/lib/data-access/user";
+import { getUserById } from "@/_models/user.model";
 import ChangePasswordForm from "./change-password";
 import FormTitleComponent from "@/app/components/form-title";
 

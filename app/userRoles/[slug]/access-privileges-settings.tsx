@@ -13,17 +13,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, startTransition } from "react";
 import { useActionState } from "react";
-import { unAssignRolesAction } from "@/actions/userRoleController";
 import { useRouter } from "next/navigation";
 
 import Icons from "@/components/ui/icons";
 import { DataTable } from "@/components/ui/data-table-with-select";
 import { columns } from "./access-privileges-columns";
+
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   assignPrivilegesAction,
   unAssignPrivilegesAction,
-} from "@/actions/accessPrivilegesController";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+} from "@/_controllers/accessPrivileges.controller";
 
 type Role = {
   id: number;

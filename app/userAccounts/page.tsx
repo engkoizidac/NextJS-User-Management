@@ -1,4 +1,4 @@
-import getUsers from "@/lib/data-access/user";
+import getUsers from "@/_models/user.model";
 import UserAccounts from "./user-accounts";
 import FormTitleComponent from "../components/form-title";
 

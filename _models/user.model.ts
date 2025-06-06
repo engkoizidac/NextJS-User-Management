@@ -1,5 +1,5 @@
 import { Status } from "@prisma/client";
-import { prisma } from "../prisma";
+import { prisma } from "../lib/prisma";
 
 export default async function getUsers() {
   return await prisma.user.findMany({

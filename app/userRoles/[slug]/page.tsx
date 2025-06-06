@@ -1,9 +1,8 @@
+import { getRoleById } from "@/_models/role.model";
+import AccessPrivilegesSettingsPage from "./access-privileges-settings";
 import getNotAssignedAccess, {
   getAssignedAccess,
-} from "@/lib/data-access/access-privilege";
-
-import { getRoleById } from "@/lib/data-access/role";
-import AccessPrivilegesSettingsPage from "./access-privileges-settings";
+} from "@/_models/accessPrivilege.model";
 
 export default async function AccessPrivilegesPage({
   params,

@@ -16,7 +16,7 @@ import { useActionState } from "react";
 import {
   assignRolesAction,
   unAssignRolesAction,
-} from "@/actions/userRoleController";
+} from "@/_controllers/userRole.controller";
 import { useRouter } from "next/navigation";
 
 import Icons from "@/components/ui/icons";

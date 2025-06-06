@@ -1,5 +1,5 @@
 import * as React from "react";
-import getAuthUser from "@/actions/getAuthUser";
+import getAuthUser from "@/_controllers/getAuthUser.controller";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Menu } from "lucide-react";
@@ -21,10 +21,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { getUserMenus } from "@/lib/data-access/menu";
+import { getUserMenus } from "@/_models/menu.model";
 import UserNav from "./user-nav";
 import { ThemeToggle } from "./theme-toggle";
-import { getUserById } from "@/lib/data-access/user";
+import { getUserById } from "@/_models/user.model";
 
 interface MenuChild {
   id: number;

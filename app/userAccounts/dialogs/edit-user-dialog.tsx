@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { updateUser } from "@/actions/userAccountController";
+import { updateUser } from "@/_controllers/user.controller";
 import Icons from "@/components/ui/icons";
 import toast from "react-hot-toast";
 

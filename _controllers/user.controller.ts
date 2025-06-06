@@ -6,12 +6,12 @@ import getUsers, {
   patchUser,
   getUserById,
   updateUserPassword,
-} from "@/lib/data-access/user";
-import { removeUser } from "@/lib/data-access/user";
+} from "@/_models/user.model";
+import { removeUser } from "@/_models/user.model";
 import {
   UserAccountFormSchema,
   UserChangePasswordSchema,
-} from "@/lib/schema/userValidation";
+} from "@/_validations/userValidation";
 import bcrypt from "bcrypt";
 
 export async function addUser(prevState: any, formData: FormData) {

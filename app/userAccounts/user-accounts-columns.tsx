@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { clearUserPassword, deleteUser } from "@/actions/userAccountController";
+import { clearUserPassword, deleteUser } from "@/_controllers/user.controller";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { EditUserDialog } from "./dialogs/edit-user-dialog";

@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Icons from "@/components/ui/icons";
-import { changeUserPassword } from "@/actions/userAccountController";
+import { changeUserPassword } from "@/_controllers/user.controller";
 import toast from "react-hot-toast";
 
 type FormDatas = {

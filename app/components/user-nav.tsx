@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LogOut, Settings } from "lucide-react";
-import { logout } from "@/actions/auth";
+import { logout } from "@/_controllers/auth.controller";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
