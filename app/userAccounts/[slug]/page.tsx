@@ -1,9 +1,9 @@
-import {
-  getAssignedRoles,
-  getNotAssignedRoles,
-} from "@/_dataAccessLayers/role.dal";
 import RoleAssignmentSettingsPage from "./role-assignment-settings";
 import { getById } from "@/_controllers/user.controller";
+import {
+  getAllAssignedRoles,
+  getAllNotAssignedRoles,
+} from "@/_controllers/role.controller";
 
 export default async function Page({
   params,
@@ -12,8 +12,8 @@ export default async function Page({
 }) {
   const users = await getById((await params).slug);
 
-  const availableRoles = await getNotAssignedRoles((await params).slug);
-  const assignedRoles = await getAssignedRoles((await params).slug);
+  const availableRoles = await getAllNotAssignedRoles((await params).slug);
+  const assignedRoles = await getAllAssignedRoles((await params).slug);
 
   return (
     <RoleAssignmentSettingsPage

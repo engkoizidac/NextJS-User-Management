@@ -191,9 +191,9 @@ export async function getAll() {
   }
 }
 
-export async function getById(userId: string) {
+export async function getById(id: string) {
   try {
-    const users = await getUserById(userId);
+    const users = await getUserById(id);
     if (!users) throw new Error("Server error!");
     return users;
   } catch (error) {

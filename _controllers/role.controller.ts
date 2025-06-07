@@ -1,6 +1,8 @@
 "use server";
 
 import getRoles, {
+  getAssignedRoles,
+  getNotAssignedRoles,
   patchRole,
   postRole,
   removeRole,
@@ -90,5 +92,25 @@ export async function updateRole(
       error: "Failed to update role changes!",
       errors: { name: "You are renaming to a role that exist already" },
     };
+  }
+}
+
+export async function getAllNotAssignedRoles(id: string) {
+  try {
+    const users = await getNotAssignedRoles(id);
+    if (!users) throw new Error("Server error!");
+    return users;
+  } catch (error) {
+    throw new Error("Failed to retrieve all user data");
+  }
+}
+
+export async function getAllAssignedRoles(id: string) {
+  try {
+    const users = await getAssignedRoles(id);
+    if (!users) throw new Error("Server error!");
+    return users;
+  } catch (error) {
+    throw new Error("Failed to retrieve all user data");
   }
 }

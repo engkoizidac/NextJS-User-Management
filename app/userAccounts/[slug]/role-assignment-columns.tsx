@@ -2,11 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-
-interface Role {
-  id: number;
-  name: string;
-}
+import { Role } from "@/_types/role";
 
 export const columns: ColumnDef<Role>[] = [
   {
