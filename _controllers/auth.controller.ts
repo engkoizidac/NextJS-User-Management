@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import { createSession } from "@/app/lib/session";
 
 import { cookies } from "next/headers";
-import getUsers from "@/_models/user.model";
+import getUsers from "@/_dataAccessLayers/user.dal";
 
 export async function login(state: any, formData: FormData) {
   // Validate form fields

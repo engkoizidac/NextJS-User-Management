@@ -1,6 +1,6 @@
 "use server";
 
-import assignRoles, { unAssignRoles } from "@/_models/userRole.model";
+import assignRoles, { unAssignRoles } from "@/_dataAccessLayers/userRole.dal";
 
 export async function assignRolesAction(
   assignments: { userId: string; roleId: number }[]

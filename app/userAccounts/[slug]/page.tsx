@@ -1,4 +1,7 @@
-import { getAssignedRoles, getNotAssignedRoles } from "@/_models/role.model";
+import {
+  getAssignedRoles,
+  getNotAssignedRoles,
+} from "@/_dataAccessLayers/role.dal";
 import RoleAssignmentSettingsPage from "./role-assignment-settings";
 import { getById } from "@/_controllers/user.controller";
 

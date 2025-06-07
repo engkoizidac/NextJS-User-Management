@@ -1,8 +1,6 @@
-"use server";
-
 import assignAccessPrivileges, {
   unAssignAccessPrivileges,
-} from "@/_models/roleAccessPrivilege.model";
+} from "@/_dataAccessLayers/roleAccessPrivilege.dal";
 
 export async function assignPrivilegesAction(
   accessPrivileges: { roleId: number; accessPrivilegeId: number }[]

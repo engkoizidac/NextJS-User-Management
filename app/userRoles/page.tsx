@@ -1,4 +1,4 @@
-import getRoles from "@/_models/role.model";
+import getRoles from "@/_dataAccessLayers/role.dal";
 import UserRoles from "./user-roles";
 import FormTitleComponent from "../components/form-title";
 

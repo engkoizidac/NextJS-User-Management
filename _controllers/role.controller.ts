@@ -4,7 +4,7 @@ import getRoles, {
   patchRole,
   postRole,
   removeRole,
-} from "@/_models/role.model";
+} from "@/_dataAccessLayers/role.dal";
 import { RoleFormSchema } from "@/_validations/roleValidation";
 import { errors } from "jose";
 

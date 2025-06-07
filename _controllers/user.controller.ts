@@ -6,8 +6,8 @@ import getUsers, {
   patchUser,
   getUserById,
   updateUserPassword,
-} from "@/_models/user.model";
-import { removeUser } from "@/_models/user.model";
+} from "@/_dataAccessLayers/user.dal";
+import { removeUser } from "@/_dataAccessLayers/user.dal";
 import {
   UserAccountFormSchema,
   UserChangePasswordSchema,

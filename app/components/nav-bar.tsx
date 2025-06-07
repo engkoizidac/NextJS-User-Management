@@ -21,10 +21,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { getUserMenus } from "@/_models/menu.model";
+import { getUserMenus } from "@/_dataAccessLayers/menu.dal";
 import UserNav from "./user-nav";
 import { ThemeToggle } from "./theme-toggle";
-import { getUserById } from "@/_models/user.model";
+import { getUserById } from "@/_dataAccessLayers/user.dal";
 
 interface MenuChild {
   id: number;

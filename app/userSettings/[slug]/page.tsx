@@ -1,4 +1,4 @@
-import { getUserById } from "@/_models/user.model";
+import { getUserById } from "@/_dataAccessLayers/user.dal";
 import ChangePasswordForm from "./change-password";
 import FormTitleComponent from "@/app/components/form-title";
 
