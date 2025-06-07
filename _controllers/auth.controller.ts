@@ -35,6 +35,15 @@ export async function login(state: any, formData: FormData) {
 
   if (!existingUser) return { errors: { username: "Username doesn't exist." } };
 
+  // Check if user is deactivated
+  if (existingUser.status === "Deactivated") {
+    return {
+      errors: {
+        username: "Account is deactivated. Please contact your administrator.",
+      },
+    };
+  }
+
   //Check password
   const matchedPassword = await bcrypt.compare(
     <string>password,

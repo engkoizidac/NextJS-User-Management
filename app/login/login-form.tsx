@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { useActionState, useState } from "react";
 import { login } from "@/_controllers/auth.controller";
 import { Button } from "@/components/ui/button";
@@ -26,6 +25,7 @@ export function LoginForm() {
     login,
     { errors: {} }
   );
+
   const [showPassword, setShowPassword] = useState(false);
 
   const renderError = (error?: string[] | string) => {
