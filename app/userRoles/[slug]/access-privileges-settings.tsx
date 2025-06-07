@@ -20,37 +20,19 @@ import { DataTable } from "@/components/ui/data-table-with-select";
 import { columns } from "./access-privileges-columns";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Role } from "@/_types/role";
+import { AccessPrivilege } from "@/_types/accessPrivileges";
 import {
   assignPrivilegesAction,
   unAssignPrivilegesAction,
 } from "@/_controllers/accessPrivileges.controller";
-
-type Role = {
-  id: number;
-  name: string;
-};
-
-interface MenuMain {
-  name: string;
-}
-
-interface MenuChild {
-  name: string;
-  menuMain: MenuMain;
-}
-
-interface AccessPrivilege {
-  id: number;
-  description: string;
-  menu_child: MenuChild;
-}
 
 export default function AccessPrivilegesSettingsPage({
   role,
   availablePrivileges,
   assignedPrivileges,
 }: {
-  role: Role | null;
+  role: Role;
   availablePrivileges: AccessPrivilege[];
   assignedPrivileges: AccessPrivilege[];
 }) {
@@ -89,9 +71,6 @@ export default function AccessPrivilegesSettingsPage({
     );
 
   const assignPrivileges = () => {
-    if (!role?.id) {
-      throw new Error("User ID is required to assign roles.");
-    }
     const selectedAvailableAssignments = selectedAvailablePrivileges.map(
       (AccessPrivilege) => ({
         roleId: role.id,
@@ -136,8 +115,8 @@ export default function AccessPrivilegesSettingsPage({
       privilege.description
         .toLowerCase()
         .includes(searchAvailablePrivileges.toLowerCase()) ||
-      privilege.menu_child.menuMain.name
-        .toLowerCase()
+      privilege.menu_child?.menuMain?.name
+        ?.toLowerCase()
         .includes(searchAvailablePrivileges.toLowerCase())
   );
 
@@ -147,8 +126,8 @@ export default function AccessPrivilegesSettingsPage({
       privilege.description
         .toLowerCase()
         .includes(searchAssignedPrivileges.toLowerCase()) ||
-      privilege.menu_child.menuMain.name
-        .toLowerCase()
+      privilege.menu_child?.menuMain?.name
+        ?.toLowerCase()
         .includes(searchAssignedPrivileges.toLowerCase())
   );
 

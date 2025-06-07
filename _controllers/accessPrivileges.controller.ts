@@ -1,3 +1,5 @@
+"use server";
+
 import getNotAssignedAccess, {
   getAssignedAccess,
 } from "@/_dataAccessLayers/accessPrivilege.dal";

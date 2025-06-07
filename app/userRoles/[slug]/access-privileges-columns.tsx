@@ -2,21 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-
-interface MenuMain {
-  name: string;
-}
-
-interface MenuChild {
-  name: string;
-  menuMain: MenuMain;
-}
-
-interface AccessPrivilege {
-  id: number;
-  description: string;
-  menu_child: MenuChild;
-}
+import { AccessPrivilege } from "@/_types/accessPrivileges";
 
 export const columns: ColumnDef<AccessPrivilege>[] = [
   {
@@ -44,13 +30,11 @@ export const columns: ColumnDef<AccessPrivilege>[] = [
     header: "Description",
   },
   {
-    id: "menu",
-    accessorFn: (row) => row.menu_child.menuMain.name,
+    accessorKey: "menu_child.menuMain.name",
     header: "Menu",
   },
   {
-    id: "subMenu",
-    accessorFn: (row) => row.menu_child.name,
+    accessorKey: "menu_child.name",
     header: "Sub-menu",
   },
 ];

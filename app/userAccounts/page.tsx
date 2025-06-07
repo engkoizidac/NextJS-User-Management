@@ -1,9 +1,9 @@
 import UserAccounts from "./user-accounts";
 import FormTitleComponent from "../components/form-title";
-import { getAllUser } from "@/_controllers/user.controller";
+import { getAll } from "@/_controllers/user.controller";
 
 export default async function UserAccountsPage() {
-  const users = await getAllUser();
+  const users = await getAll();
   return (
     <div>
       <div className="container mx-auto py-8 px-2 sm:px-4">
