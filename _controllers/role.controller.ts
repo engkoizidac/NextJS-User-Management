@@ -23,7 +23,7 @@ export async function createRole(prevState: any, formData: FormData) {
   const { name } = validatedFields.data;
 
   try {
-    const roleCollection = await getRoles();
+    const roleCollection = await getAllRole();
     if (!roleCollection) return { errors: { name: "Server error!" } };
 
     const existingRole = await roleCollection.find(
@@ -108,6 +108,16 @@ export async function getAllNotAssignedRoles(id: string) {
 export async function getAllAssignedRoles(id: string) {
   try {
     const users = await getAssignedRoles(id);
+    if (!users) throw new Error("Server error!");
+    return users;
+  } catch (error) {
+    throw new Error("Failed to retrieve all user data");
+  }
+}
+
+export async function getAllRole() {
+  try {
+    const users = await getRoles();
     if (!users) throw new Error("Server error!");
     return users;
   } catch (error) {

@@ -31,7 +31,7 @@ export async function addUser(prevState: any, formData: FormData) {
   const { fullName, username, password, status } = validatedFields.data;
 
   try {
-    const userCollection = await getAll();
+    const userCollection = await getAllUser();
     if (!userCollection) return { errors: { username: "Server error!" } };
 
     const existingUser = await userCollection.find(
@@ -181,7 +181,7 @@ export async function changeUserPassword(
   }
 }
 
-export async function getAll() {
+export async function getAllUser() {
   try {
     const users = await getUsers();
     if (!users) throw new Error("Server error!");
