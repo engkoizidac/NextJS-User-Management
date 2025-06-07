@@ -27,9 +27,6 @@ import YesNoDialogDeleteUser from "./dialogs/confirm-delete-user-dialog";
 import YesNoDialogClearPassword from "./dialogs/confirm-clear-password-dialog";
 import Link from "next/link";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
 function ActionsCell({ row }: { row: any }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
