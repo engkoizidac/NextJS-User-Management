@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 import { LoginFormSchema } from "@/_validations/user.validation";
 import { redirect } from "next/navigation";
-import { createSession } from "@/app/lib/session";
+import { createSession } from "@/app/auth/session";
 
 import { cookies } from "next/headers";
 import getUsers from "@/_dataAccessLayers/user.dal";

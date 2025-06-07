@@ -5,8 +5,7 @@ import getRoles, {
   postRole,
   removeRole,
 } from "@/_dataAccessLayers/role.dal";
-import { RoleFormSchema } from "@/_validations/roleValidation";
-import { errors } from "jose";
+import { RoleFormSchema } from "@/_validations/role.validation";
 
 export async function createRole(prevState: any, formData: FormData) {
   const validatedFields = RoleFormSchema.safeParse({

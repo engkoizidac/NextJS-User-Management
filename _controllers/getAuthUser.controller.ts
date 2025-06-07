@@ -1,4 +1,4 @@
-import { decrypt } from "@/app/lib/session";
+import { decrypt } from "@/app/auth/session";
 import { getUserMenus } from "@/_dataAccessLayers/menu.dal";
 import { cookies } from "next/headers";
 
