@@ -2,7 +2,7 @@
 
 import bcrypt from "bcrypt";
 
-import { LoginFormSchema } from "@/_validations/userValidation";
+import { LoginFormSchema } from "@/_validations/user.validation";
 import { redirect } from "next/navigation";
 import { createSession } from "@/app/lib/session";
 

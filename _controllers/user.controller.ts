@@ -11,7 +11,7 @@ import { removeUser } from "@/_dataAccessLayers/user.dal";
 import {
   UserAccountFormSchema,
   UserChangePasswordSchema,
-} from "@/_validations/userValidation";
+} from "@/_validations/user.validation";
 import bcrypt from "bcrypt";
 
 export async function addUser(prevState: any, formData: FormData) {
