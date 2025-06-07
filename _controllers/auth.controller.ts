@@ -9,7 +9,7 @@ import { createSession } from "@/app/auth/session";
 import { cookies } from "next/headers";
 import getUsers from "@/_dataAccessLayers/user.dal";
 
-export async function login(state: any, formData: FormData) {
+export async function login(prevState: any, formData: FormData) {
   // Validate form fields
   const validatedFields = LoginFormSchema.safeParse({
     username: formData.get("username"),
@@ -49,7 +49,7 @@ export async function login(state: any, formData: FormData) {
     <string>password,
     existingUser.password
   );
-  if (!matchedPassword) return { errors: { username: "Invalid password." } };
+  if (!matchedPassword) return { errors: { password: "Invalid password." } };
 
   // Create a session
   await createSession(existingUser.id);

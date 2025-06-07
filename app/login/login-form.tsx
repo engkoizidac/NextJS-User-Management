@@ -13,29 +13,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
-type LoginState = {
-  errors?: {
-    username?: string[] | string;
-    password?: string[] | string;
-  };
-};
-
 export function LoginForm() {
-  const [state, action, isPending] = useActionState<LoginState, FormData>(
-    login,
-    { errors: {} }
-  );
+  const [state, action, isPending] = useActionState(login, undefined);
 
   const [showPassword, setShowPassword] = useState(false);
-
-  const renderError = (error?: string[] | string) => {
-    if (!error) return null;
-    return (
-      <p className="text-sm text-red-600">
-        {Array.isArray(error) ? error.join(", ") : error}
-      </p>
-    );
-  };
 
   return (
     <Card>
@@ -51,7 +32,9 @@ export function LoginForm() {
           <div className="space-y-3">
             <Label htmlFor="username">Username</Label>
             <Input id="username" name="username" />
-            {renderError(state?.errors?.username)}
+            {state?.errors?.username && (
+              <p className="text-sm text-red-500">{state.errors.username}</p>
+            )}
           </div>
 
           <div className="space-y-3">
@@ -63,6 +46,7 @@ export function LoginForm() {
                 type={showPassword ? "text" : "password"}
                 className="pr-10"
               />
+
               <Button
                 type="button"
                 variant="ghost"
@@ -80,7 +64,9 @@ export function LoginForm() {
                 </span>
               </Button>
             </div>
-            {renderError(state?.errors?.password)}
+            {state?.errors?.password && (
+              <p className="text-sm text-red-500">{state.errors.password}</p>
+            )}
           </div>
         </CardContent>
 
