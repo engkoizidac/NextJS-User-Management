@@ -9,7 +9,13 @@ export default async function getNotAssignedAccess(roleId: number) {
       },
     });
 
-    const excludedIds = assignPrivileges.map((item) => item.accessPrivilegeId);
+    type AssignedPrivilege = {
+      accessPrivilegeId: number;
+    };
+
+    const excludedIds = assignPrivileges.map(
+      (item: AssignedPrivilege) => item.accessPrivilegeId
+    );
 
     return await prisma.access_privilege.findMany({
       where: {
@@ -40,7 +46,13 @@ export async function getAssignedAccess(roleId: number) {
       },
     });
 
-    const excludedIds = assignPrivileges.map((item) => item.accessPrivilegeId);
+    type AssignedPrivilege = {
+      accessPrivilegeId: number;
+    };
+
+    const excludedIds = assignPrivileges.map(
+      (item: AssignedPrivilege) => item.accessPrivilegeId
+    );
 
     return await prisma.access_privilege.findMany({
       where: {

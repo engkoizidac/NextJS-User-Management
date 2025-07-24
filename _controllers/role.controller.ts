@@ -8,6 +8,7 @@ import getRoles, {
   postRole,
   removeRole,
 } from "@/_dataAccessLayers/role.dal";
+import { Role } from "@/_types/role";
 import { RoleFormSchema } from "@/_validations/role.validation";
 
 export async function createRole(prevState: any, formData: FormData) {
@@ -27,9 +28,10 @@ export async function createRole(prevState: any, formData: FormData) {
     const roleCollection = await getAll();
     if (!roleCollection) return { errors: { name: "Server error!" } };
 
-    const existingRole = await roleCollection.find(
-      (role) => role.name === name
+    const existingRole = roleCollection.find(
+      (role: Role) => role.name === name
     );
+
     if (existingRole) return { errors: { name: "Role already exists!" } };
 
     const role = await postRole(name);

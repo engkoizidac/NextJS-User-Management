@@ -47,7 +47,11 @@ export async function getNotAssignedRoles(userId: string) {
       },
     });
 
-    const excludedIds = assignRoles.map((item) => item.roleId);
+    type AssignedRole = {
+      roleId: number;
+    };
+
+    const excludedIds = assignRoles.map((item: AssignedRole) => item.roleId);
 
     return await prisma.role.findMany({
       select: {
@@ -77,7 +81,11 @@ export async function getAssignedRoles(userId: string) {
       },
     });
 
-    const includeIds = assignRoles.map((item) => item.roleId);
+    type AssignedRole = {
+      roleId: number;
+    };
+
+    const includeIds = assignRoles.map((item: AssignedRole) => item.roleId);
 
     return prisma.role.findMany({
       select: {

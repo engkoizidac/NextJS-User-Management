@@ -8,6 +8,7 @@ import { createSession } from "@/app/auth/session";
 
 import { cookies } from "next/headers";
 import getUsers from "@/_dataAccessLayers/user.dal";
+import { User } from "@/_types/user";
 
 export async function login(prevState: any, formData: FormData) {
   // Validate form fields
@@ -29,8 +30,8 @@ export async function login(prevState: any, formData: FormData) {
   const userCollection = await getUsers();
   if (!userCollection) return { errors: { username: "Server error!" } };
 
-  const existingUser = await userCollection.find(
-    (user) => user.username === username
+  const existingUser = userCollection.find(
+    (user: User) => user.username === username
   );
 
   if (!existingUser) return { errors: { username: "Username doesn't exist." } };

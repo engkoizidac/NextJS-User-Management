@@ -39,11 +39,6 @@ interface MenuMain {
   children: MenuChild[];
 }
 
-interface User {
-  id: string;
-  fullName: string;
-}
-
 export async function NavBarComponent() {
   const authUser = await getAuthUser();
   const userIdAsString = authUser?.userId?.toString();

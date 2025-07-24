@@ -8,6 +8,7 @@ import getUsers, {
   updateUserPassword,
 } from "@/_dataAccessLayers/user.dal";
 import { removeUser } from "@/_dataAccessLayers/user.dal";
+import { User } from "@/_types/user";
 import {
   UserAccountFormSchema,
   UserChangePasswordSchema,
@@ -34,9 +35,10 @@ export async function addUser(prevState: any, formData: FormData) {
     const userCollection = await getAll();
     if (!userCollection) return { errors: { username: "Server error!" } };
 
-    const existingUser = await userCollection.find(
-      (user) => user.username === username
+    const existingUser = userCollection.find(
+      (user: User) => user.username === username
     );
+
     if (existingUser)
       return { errors: { username: "Username already exists!" } };
 

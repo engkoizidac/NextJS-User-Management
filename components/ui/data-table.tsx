@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, PlusCircle } from "lucide-react";
+import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -34,15 +34,9 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter();
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [open, setOpen] = useState(false);
-
-  const handleSubmitSuccess = useCallback(() => {
-    router.refresh();
-  }, [router]);
 
   const table = useReactTable({
     data,
