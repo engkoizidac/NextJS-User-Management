@@ -1,24 +1,32 @@
-# 1. Base image
+# 1. Build stage
 FROM node:18-alpine AS builder
 
-# 2. Set working directory
 WORKDIR /app
 
-# 3. Copy package files and install deps
+# Install dependencies
 COPY package*.json ./
 RUN npm install
 
-# 4. Copy rest of the app
+# Copy all files and generate Prisma client
 COPY . .
-
-# 5. Generate Prisma client
 RUN npx prisma generate
 
-# 6. Build Next.js app
+# Build the Next.js app
 RUN npm run build
 
-# 7. Expose the port
+# 2. Production stage
+FROM node:18-alpine AS runner
+
+WORKDIR /app
+
+# Copy necessary files from builder
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/.next .next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/.env.local .env
+
 EXPOSE 3000
 
-# 8. Run the app
-CMD ["npm", "start"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npm start"]

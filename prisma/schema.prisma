@@ -19,18 +19,13 @@ model user {
   user_role user_role[]
 }
 
-enum Status {
-  Activated
-  Deactivated
-}
-
 model role {
   id                    Int                     @id @default(autoincrement())
   name                  String                  @unique(map: "Role_name_key")
   createdAt             DateTime                @default(now())
   updatedAt             DateTime
-  user_role             user_role[]
   role_access_privilege role_access_privilege[]
+  user_role             user_role[]
 }
 
 model menu_main {
@@ -45,8 +40,10 @@ model menu_child {
   description      String
   link             String
   menuMainId       Int
-  menuMain         menu_main          @relation(fields: [menuMainId], references: [id])
   access_privilege access_privilege[]
+  menuMain         menu_main          @relation(fields: [menuMainId], references: [id])
+
+  @@index([menuMainId], map: "menu_child_menuMainId_fkey")
 }
 
 model user_role {
@@ -55,6 +52,9 @@ model user_role {
   roleId Int
   role   role   @relation(fields: [roleId], references: [id], onDelete: Cascade)
   user   user   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([roleId], map: "user_role_roleId_fkey")
+  @@index([userId], map: "user_role_userId_fkey")
 }
 
 model access_privilege {
@@ -63,12 +63,22 @@ model access_privilege {
   menuChildId           Int
   menu_child            menu_child              @relation(fields: [menuChildId], references: [id])
   role_access_privilege role_access_privilege[]
+
+  @@index([menuChildId], map: "access_privilege_menuChildId_fkey")
 }
 
 model role_access_privilege {
   id                Int              @id @default(autoincrement())
   roleId            Int
-  role              role             @relation(fields: [roleId], references: [id], onDelete: Cascade)
   accessPrivilegeId Int
   access_privilege  access_privilege @relation(fields: [accessPrivilegeId], references: [id])
+  role              role             @relation(fields: [roleId], references: [id])
+
+  @@index([accessPrivilegeId], map: "role_access_privilege_accessPrivilegeId_fkey")
+  @@index([roleId], map: "role_access_privilege_roleId_fkey")
+}
+
+enum Status {
+  Activated
+  Deactivated
 }
