@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export function LoginForm() {
   const [state, action, isPending] = useActionState(login, undefined);
@@ -70,11 +71,17 @@ export function LoginForm() {
           </div>
         </CardContent>
 
-        <CardFooter className="pt-8 pb-4">
+        <CardFooter className="flex flex-col gap-4 pt-8 pb-4">
           <Button className="w-full" type="submit" disabled={isPending}>
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign In
           </Button>
+          <p className="text-sm text-center text-muted-foreground">
+            Don't have an account?{" "}
+            <Link href="/register" className="text-blue-500 hover:underline">
+              Sign up
+            </Link>
+          </p>
         </CardFooter>
       </form>
     </Card>

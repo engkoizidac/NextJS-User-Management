@@ -8,7 +8,7 @@ const protectedRoutes = [
   "/userRoles",
   "/userSettings",
 ];
-const publicRoutes = ["/login"];
+const publicRoutes = ["/login", "/register"];
 
 export default async function middleware(req: { nextUrl: URL }) {
   const path = req.nextUrl.pathname;

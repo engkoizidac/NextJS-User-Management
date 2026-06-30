@@ -75,6 +75,8 @@ export default function UserNav({ user: User }: { user: User | null }) {
         <DropdownMenuItem
           onClick={async () => {
             await logout();
+            router.push("/login");
+            router.refresh();
           }}
         >
           <LogOut className="mr-2 h-4 w-4" />

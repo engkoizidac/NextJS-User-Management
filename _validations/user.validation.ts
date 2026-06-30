@@ -35,3 +35,26 @@ export const UserChangePasswordSchema = z
     message: "Passwords do not match! ",
     path: ["confirmedPassword"],
   });
+
+export const RegisterFormSchema = z
+  .object({
+    fullName: z.string().min(1, { message: "Full Name is required." }).trim(),
+    username: z.string().min(1, { message: "Username is required." }).trim(),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .max(20, "Password must be no more than 20 characters")
+      .refine((p) => /[a-z]/.test(p), "Must include a lowercase letter")
+      .refine((p) => /[A-Z]/.test(p), "Must include an uppercase letter")
+      .refine((p) => /\d/.test(p), "Must include a digit")
+      .refine((p) => /[\W_]/.test(p), "Must include a special character"),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Please confirm your password." })
+      .trim(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match!",
+    path: ["confirmPassword"],
+  });
+
