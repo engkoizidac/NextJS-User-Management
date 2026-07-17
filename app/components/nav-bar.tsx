@@ -67,7 +67,7 @@ export async function NavBarComponent() {
             </div> */}
             <div>
               <div className="flex justify-center">
-                <h1 className="flex items-center text-3xl font-extrabold tracking-tight">
+                <h1 className="flex items-center text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">
                   <span>PETR</span>
 
                   <Image
@@ -82,7 +82,7 @@ export async function NavBarComponent() {
                 </h1>
               </div>
 
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">
                 Gas Station Management
               </p>
             </div>
