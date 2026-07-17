@@ -61,7 +61,7 @@ export async function NavBarComponent() {
             </div>
           )}
 
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/dashboard" className="flex items-center gap-3">
             {/*<div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent shadow-[0_0_30px_rgba(59,130,246,0.16)]">
               <div className="h-5 w-5 rounded-full border-2 border-primary/70" />
             </div> */}
