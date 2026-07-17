@@ -20,7 +20,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
-      <body className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_32%),linear-gradient(135deg,_rgba(15,23,42,0.98),_rgba(2,6,23,1))] text-foreground antialiased">
+      <body className="min-h-screen bg-white dark:bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.16),_transparent_32%),linear-gradient(135deg,_rgba(15,23,42,0.98),_rgba(2,6,23,1))] text-foreground antialiased">
         <Toaster position="bottom-center" />
         <Providers>
           <div className="flex min-h-screen flex-col">

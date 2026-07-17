@@ -55,10 +55,8 @@ export async function login(prevState: any, formData: FormData) {
   // Create a session
   await createSession(existingUser.id);
 
-  //console.log(existingUser);
-
-  // Redirect
-  redirect("/");
+  // Redirect to dashboard after login
+  redirect("/dashboard");
 }
 
 export async function register(prevState: any, formData: FormData) {

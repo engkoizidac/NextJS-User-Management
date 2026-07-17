@@ -187,7 +187,6 @@ export function SidebarComponent() {
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="truncate font-medium">{child.name}</p>
-                        <p className="truncate text-xs text-muted-foreground/80">{child.description}</p>
                       </div>
                     </Link>
                   ))}

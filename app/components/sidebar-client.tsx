@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SheetClose } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { loadMenuTree } from "@/redux/thunk/menuThunk";
@@ -145,16 +146,9 @@ export default function SidebarClient() {
   const menusToRender = menuTree.length > 0 ? menuTree : fallbackMenuTree;
 
   return (
-    <aside className="hidden w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl lg:block">
+    <aside className="w-full lg:w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl">
       <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-background/95 via-background/80 to-muted/40 p-4 shadow-[0_0_40px_rgba(15,23,42,0.18)]">
-        <div className="mb-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/12 to-transparent px-3 py-3">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">
-            Primary Navigation
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Move through branches, inventory, and operational reports.
-          </p>
-        </div>
+        
 
         <nav className="space-y-2">
           {menusToRender.map((menuGroup, index) => (
@@ -176,19 +170,19 @@ export default function SidebarClient() {
               {menuGroup.children.length > 0 ? (
                 <div className="mt-2 space-y-1 border-l border-primary/10 pl-3">
                   {menuGroup.children.map((child, childIndex) => (
-                    <Link
-                      key={child.id}
-                      href={child.link}
-                      className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-muted-foreground transition-all hover:bg-primary/10 hover:text-foreground"
-                    >
-                      <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/10 bg-background/70 text-primary/70">
-                        {childIconMap[childIndex % childIconMap.length]}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate font-medium">{child.name}</p>
-                        <p className="truncate text-xs text-muted-foreground/80">{child.description}</p>
-                      </div>
-                    </Link>
+                    <SheetClose asChild key={child.id}>
+                      <Link
+                        href={child.link}
+                        className="flex items-center gap-2 rounded-xl px-2 py-2 text-sm text-muted-foreground transition-all hover:bg-primary/10 hover:text-foreground"
+                      >
+                        <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/10 bg-background/70 text-primary/70">
+                          {childIconMap[childIndex % childIconMap.length]}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate font-medium">{child.name}</p>
+                        </div>
+                      </Link>
+                    </SheetClose>
                   ))}
                 </div>
               ) : null}
