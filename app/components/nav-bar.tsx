@@ -13,6 +13,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import SidebarClient from "./sidebar-client";
+import Image from "next/image";
 
 export async function NavBarComponent() {
   let authUser = null;
@@ -48,7 +49,9 @@ export async function NavBarComponent() {
                 </SheetTrigger>
                 <SheetContent side="left" className="w-[320px] p-0">
                   <SheetHeader className="px-4 py-3 border-b">
-                    <SheetTitle className="text-lg font-semibold">Navigation</SheetTitle>
+                    <SheetTitle className="text-lg font-semibold">
+                      Navigation
+                    </SheetTitle>
                   </SheetHeader>
                   <div className="p-4">
                     <SidebarClient />
@@ -59,15 +62,30 @@ export async function NavBarComponent() {
           )}
 
           <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent shadow-[0_0_30px_rgba(59,130,246,0.16)]">
-            <div className="h-5 w-5 rounded-full border-2 border-primary/70" />
-          </div>
-          <div>
-            <p className="text-base font-semibold tracking-tight text-foreground">
-              Oil Branch Inventory
-            </p>
-            <p className="text-xs text-muted-foreground">Operations hub</p>
-          </div>
+            {/*<div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent shadow-[0_0_30px_rgba(59,130,246,0.16)]">
+              <div className="h-5 w-5 rounded-full border-2 border-primary/70" />
+            </div> */}
+            <div>
+              <div className="flex justify-center">
+                <h1 className="flex items-center text-3xl font-extrabold tracking-tight">
+                  <span>PETR</span>
+
+                  <Image
+                    src="/logo.png"
+                    alt="PetroFlow Logo"
+                    width={34}
+                    height={34}
+                    className="-ml-0.5 -mr-0.5"
+                  />
+
+                  <span className="text-blue-500">FLOW</span>
+                </h1>
+              </div>
+
+              <p className="text-xs text-muted-foreground">
+                Gas Station Management
+              </p>
+            </div>
           </Link>
         </div>
 
