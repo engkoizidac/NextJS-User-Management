@@ -68,16 +68,7 @@ export async function NavBarComponent() {
             <div>
               <div className="flex justify-center">
                 <h1 className="flex items-center text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">
-                  <span>PETR</span>
-
-                  <Image
-                    src="/logo.png"
-                    alt="PetroFlow Logo"
-                    width={34}
-                    height={34}
-                    className="-ml-0.5 -mr-0.5"
-                  />
-
+                  <span>PETRO</span>
                   <span className="text-blue-500">FLOW</span>
                 </h1>
               </div>
