@@ -53,14 +53,14 @@ export function SidebarComponent() {
   return (
     <aside className="hidden w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl lg:block">
       <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-background/95 via-background/80 to-muted/40 p-4 shadow-[0_0_40px_rgba(15,23,42,0.18)]">
-        <div className="mb-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/12 to-transparent px-3 py-3">
+        {/*<div className="mb-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/12 to-transparent px-3 py-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary/80">
             Primary Navigation
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             Move through branches, inventory, and operational reports.
           </p>
-        </div>
+        </div>*/}
 
         <nav className="space-y-2">
           {menuTree.map((menuGroup, index) => (
