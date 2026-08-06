@@ -22,99 +22,6 @@ import {
   Boxes,
 } from "lucide-react";
 
-const fallbackMenuTree: MenuGroupItem[] = [
-  {
-    id: 1,
-    name: "Dashboard",
-    children: [
-      {
-        id: 101,
-        name: "Overview",
-        link: "/dashboard",
-        description: "Executive view of fleet and stock health",
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Branches",
-    children: [
-      {
-        id: 201,
-        name: "Branch List",
-        link: "/branches",
-        description: "Track every branch in the network",
-      },
-      {
-        id: 202,
-        name: "Add Branch",
-        link: "/branches/new",
-        description: "Register a new operational branch",
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Inventory",
-    children: [
-      {
-        id: 301,
-        name: "Stock Levels",
-        link: "/inventory/stocks",
-        description: "Monitor current stock across branches",
-      },
-      {
-        id: 302,
-        name: "Deliveries",
-        link: "/inventory/deliveries",
-        description: "Track incoming fuel and lubricant deliveries",
-      },
-      {
-        id: 303,
-        name: "Oil Types",
-        link: "/inventory/types",
-        description: "Manage diesel, unleaded and specialty oils",
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Reports",
-    children: [
-      {
-        id: 401,
-        name: "Stock Movement",
-        link: "/reports/stock-movement",
-        description: "Historical movement for each product",
-      },
-      {
-        id: 402,
-        name: "Branch Performance",
-        link: "/reports/branch-performance",
-        description: "Evaluate branch-level performance",
-      },
-    ],
-  },
-  {
-    id: 5,
-    name: "Settings",
-    children: [
-      {
-        id: 501,
-        name: "User Accounts",
-        link: "/userAccounts",
-        description: "Maintain user access and profiles",
-      },
-      {
-        id: 502,
-        name: "User Roles",
-        link: "/userRoles",
-        description: "Manage roles and permissions",
-      },
-    ],
-  },
-];
-
 const iconMap: Record<number, React.ReactNode> = {
   1: <LayoutDashboard className="h-4 w-4" />,
   2: <Building2 className="h-4 w-4" />,
@@ -143,15 +50,13 @@ export default function SidebarClient() {
     }
   }, [dispatch, status]);
 
-  const menusToRender = menuTree.length > 0 ? menuTree : fallbackMenuTree;
-
   return (
     <aside className="w-full lg:w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl">
       <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-background/95 via-background/80 to-muted/40 p-4 shadow-[0_0_40px_rgba(15,23,42,0.18)]">
         
 
         <nav className="space-y-2">
-          {menusToRender.map((menuGroup, index) => (
+          {menuTree.map((menuGroup, index) => (
             <details
               key={menuGroup.id}
               className="group rounded-2xl border border-transparent bg-background/60 p-2 transition-all hover:border-primary/20 hover:bg-background/80"
