@@ -32,7 +32,7 @@ export async function getUserMenus(userId: string) {
 
   const menus = new Map<
     number,
-    { id: number; name: string; children: any[] }
+    { id: number; name: string; icon: string; children: any[] }
   >();
 
   for (const userRole of userWithRoles.user_role) {
@@ -44,6 +44,7 @@ export async function getUserMenus(userId: string) {
         menus.set(menuMain.id, {
           id: menuMain.id,
           name: menuMain.name,
+          icon: menuMain.icon,
           children: [],
         });
       }

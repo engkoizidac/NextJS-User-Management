@@ -5,7 +5,7 @@ import { SheetClose } from "@/components/ui/sheet";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { loadMenuTree } from "@/redux/thunk/menuThunk";
-import type { MenuGroupItem } from "@/_types/menu";
+
 import {
   BarChart3,
   Blocks,
@@ -53,8 +53,6 @@ export default function SidebarClient() {
   return (
     <aside className="w-full lg:w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl">
       <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-background/95 via-background/80 to-muted/40 p-4 shadow-[0_0_40px_rgba(15,23,42,0.18)]">
-        
-
         <nav className="space-y-2">
           {menuTree.map((menuGroup, index) => (
             <details

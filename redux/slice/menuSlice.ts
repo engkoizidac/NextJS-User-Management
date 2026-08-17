@@ -1,21 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loadMenuTree } from "../thunk/menuThunk";
-
-export interface MenuChildItem {
-  id: number;
-  name: string;
-  link: string;
-  description: string;
-}
-
-export interface MenuGroupItem {
-  id: number;
-  name: string;
-  children: MenuChildItem[];
-}
+import { MenuMain } from "@/_types/menuMain";
 
 interface MenuState {
-  items: MenuGroupItem[];
+  items: MenuMain[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -48,7 +36,10 @@ const menuSlice = createSlice({
       })
       .addCase(loadMenuTree.rejected, (state, action) => {
         state.status = "failed";
-        state.error = (action.payload as string) ?? action.error.message ?? "Failed to load menu tree.";
+        state.error =
+          (action.payload as string) ??
+          action.error.message ??
+          "Failed to load menu tree.";
       });
   },
 });
