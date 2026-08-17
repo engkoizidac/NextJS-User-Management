@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { loadMenuTree } from "@/redux/thunk/menuThunk";
-import type { MenuGroupItem } from "@/_types/menu";
+
 import {
   BarChart3,
   Blocks,
