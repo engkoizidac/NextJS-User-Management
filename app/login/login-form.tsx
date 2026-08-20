@@ -13,15 +13,24 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useAppDispatch } from "@/redux/hooks";
+import { resetMenu } from "@/redux/slice/menuSlice";
 
 export function LoginForm() {
+  const dispatch = useAppDispatch();
   const [state, action, isPending] = useActionState(login, undefined);
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleSubmit = (formData: FormData) => {
+    dispatch(resetMenu());
+    action(formData);
+  };
+
   return (
     <Card>
-      <form action={action}>
+      <form action={handleSubmit}>
+
         <CardHeader className="space-y-1">
           <h2 className="text-2xl font-semibold">User Login</h2>
           <p className="text-sm text-muted-foreground">

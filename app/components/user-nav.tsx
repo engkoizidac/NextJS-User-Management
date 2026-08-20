@@ -14,6 +14,8 @@ import {
 import { LogOut, Settings } from "lucide-react";
 import { logout } from "@/_controllers/auth.controller";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/redux/hooks";
+import { resetMenu } from "@/redux/slice/menuSlice";
 
 interface User {
   id: string;
@@ -22,6 +24,7 @@ interface User {
 
 export default function UserNav({ user: User }: { user: User | null }) {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,7 +38,7 @@ export default function UserNav({ user: User }: { user: User | null }) {
               className="bg-blue-500 text-white"
               suppressHydrationWarning
             >
-              {User?.fullName.substring(0, 2)}
+              {User?.fullName?.substring(0, 2)}
             </AvatarFallback>
           </Avatar>
           <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-500 ring-1 ring-white"></span>
@@ -52,14 +55,6 @@ export default function UserNav({ user: User }: { user: User | null }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {/* <DropdownMenuItem>
-            <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <CreditCard className="mr-2 h-4 w-4" />
-            <span>Billing</span>
-          </DropdownMenuItem> */}
           <DropdownMenuItem
             onClick={() => {
               if (User?.id) {
@@ -74,6 +69,7 @@ export default function UserNav({ user: User }: { user: User | null }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={async () => {
+            dispatch(resetMenu());
             await logout();
             router.push("/login");
             router.refresh();
@@ -86,3 +82,4 @@ export default function UserNav({ user: User }: { user: User | null }) {
     </DropdownMenu>
   );
 }
+

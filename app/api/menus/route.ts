@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import getAuthUser from "@/_controllers/getAuthUser.controller";
 import { getUserMenus } from "@/_dataAccessLayers/menu.dal";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   const authUser = await getAuthUser();
   if (!authUser) {
@@ -16,3 +18,4 @@ export async function GET(request: NextRequest) {
   const menuTree = await getUserMenus(userIdAsString);
   return NextResponse.json(menuTree);
 }
+

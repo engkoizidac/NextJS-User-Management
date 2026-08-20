@@ -43,6 +43,7 @@ export default function SidebarClient() {
   const dispatch = useAppDispatch();
   const menuTree = useAppSelector((state) => state.menu.items);
   const status = useAppSelector((state) => state.menu.status);
+  const error = useAppSelector((state) => state.menu.error);
 
   useEffect(() => {
     if (status === "idle") {
@@ -53,6 +54,32 @@ export default function SidebarClient() {
   return (
     <aside className="w-full lg:w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl">
       <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-background/95 via-background/80 to-muted/40 p-4 shadow-[0_0_40px_rgba(15,23,42,0.18)]">
+        {status === "loading" && (
+          <div className="space-y-3 py-4">
+            <div className="h-8 rounded-xl bg-muted/60 animate-pulse" />
+            <div className="h-8 rounded-xl bg-muted/40 animate-pulse" />
+            <div className="h-8 rounded-xl bg-muted/60 animate-pulse" />
+          </div>
+        )}
+
+        {status === "failed" && (
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-3 text-center">
+            <p className="text-xs text-red-400 mb-2">{error || "Failed to load menus"}</p>
+            <button
+              onClick={() => dispatch(loadMenuTree())}
+              className="text-xs font-medium text-primary hover:underline"
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
+        {status === "succeeded" && menuTree.length === 0 && (
+          <div className="p-4 text-center text-xs text-muted-foreground">
+            No accessible menus assigned to your role.
+          </div>
+        )}
+
         <nav className="space-y-2">
           {menuTree.map((menuGroup, index) => (
             <details
@@ -70,7 +97,7 @@ export default function SidebarClient() {
                 <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform duration-300 group-open:rotate-90" />
               </summary>
 
-              {menuGroup.children.length > 0 ? (
+              {menuGroup.children && menuGroup.children.length > 0 ? (
                 <div className="mt-2 space-y-1 border-l border-primary/10 pl-3">
                   {menuGroup.children.map((child, childIndex) => (
                     <SheetClose asChild key={child.id}>
@@ -96,3 +123,4 @@ export default function SidebarClient() {
     </aside>
   );
 }
+
