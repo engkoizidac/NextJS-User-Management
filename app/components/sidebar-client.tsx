@@ -39,22 +39,33 @@ const childIconMap = [
   <Users className="h-3.5 w-3.5" key="users" />,
 ];
 
-export default function SidebarClient() {
+import { setMenus } from "@/redux/slice/menuSlice";
+import { MenuMain } from "@/_types/menuMain";
+
+export default function SidebarClient({
+  initialMenus = [],
+}: {
+  initialMenus?: MenuMain[];
+}) {
   const dispatch = useAppDispatch();
-  const menuTree = useAppSelector((state) => state.menu.items);
+  const reduxItems = useAppSelector((state) => state.menu.items);
   const status = useAppSelector((state) => state.menu.status);
   const error = useAppSelector((state) => state.menu.error);
 
   useEffect(() => {
-    if (status === "idle") {
+    if (initialMenus.length > 0) {
+      dispatch(setMenus(initialMenus));
+    } else if (status === "idle") {
       dispatch(loadMenuTree());
     }
-  }, [dispatch, status]);
+  }, [dispatch, initialMenus, status]);
+
+  const menuTree = reduxItems.length > 0 ? reduxItems : initialMenus;
 
   return (
     <aside className="w-full lg:w-72 shrink-0 border-r border-border/60 bg-background/70 p-4 backdrop-blur-xl">
       <div className="rounded-3xl border border-border/60 bg-gradient-to-br from-background/95 via-background/80 to-muted/40 p-4 shadow-[0_0_40px_rgba(15,23,42,0.18)]">
-        {status === "loading" && (
+        {status === "loading" && menuTree.length === 0 && (
           <div className="space-y-3 py-4">
             <div className="h-8 rounded-xl bg-muted/60 animate-pulse" />
             <div className="h-8 rounded-xl bg-muted/40 animate-pulse" />
@@ -62,7 +73,7 @@ export default function SidebarClient() {
           </div>
         )}
 
-        {status === "failed" && (
+        {status === "failed" && menuTree.length === 0 && (
           <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-3 text-center">
             <p className="text-xs text-red-400 mb-2">{error || "Failed to load menus"}</p>
             <button
@@ -123,4 +134,5 @@ export default function SidebarClient() {
     </aside>
   );
 }
+
 

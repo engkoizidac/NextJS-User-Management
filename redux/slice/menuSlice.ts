@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { loadMenuTree } from "../thunk/menuThunk";
 import { MenuMain } from "@/_types/menuMain";
 
@@ -18,6 +18,11 @@ const menuSlice = createSlice({
   name: "menu",
   initialState,
   reducers: {
+    setMenus(state, action: PayloadAction<MenuMain[]>) {
+      state.items = action.payload;
+      state.status = "succeeded";
+      state.error = null;
+    },
     resetMenu(state) {
       state.items = [];
       state.status = "idle";
@@ -27,7 +32,9 @@ const menuSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loadMenuTree.pending, (state) => {
-        state.status = "loading";
+        if (state.items.length === 0) {
+          state.status = "loading";
+        }
         state.error = null;
       })
       .addCase(loadMenuTree.fulfilled, (state, action) => {
@@ -44,5 +51,6 @@ const menuSlice = createSlice({
   },
 });
 
-export const { resetMenu } = menuSlice.actions;
+export const { setMenus, resetMenu } = menuSlice.actions;
 export default menuSlice.reducer;
+

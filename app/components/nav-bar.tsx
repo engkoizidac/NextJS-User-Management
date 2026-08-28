@@ -15,7 +15,13 @@ import {
 import SidebarClient from "./sidebar-client";
 import Image from "next/image";
 
-export async function NavBarComponent() {
+import { MenuMain } from "@/_types/menuMain";
+
+export async function NavBarComponent({
+  initialMenus = [],
+}: {
+  initialMenus?: MenuMain[];
+}) {
   let authUser = null;
   let user = null;
 
@@ -54,7 +60,7 @@ export async function NavBarComponent() {
                     </SheetTitle>
                   </SheetHeader>
                   <div className="p-4">
-                    <SidebarClient />
+                    <SidebarClient initialMenus={initialMenus} />
                   </div>
                 </SheetContent>
               </Sheet>
